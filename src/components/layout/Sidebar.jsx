@@ -7,13 +7,15 @@ import {
     Briefcase,
     UserCog,
     Settings,
-    Truck
+    Truck,
+    FileSpreadsheet
 } from 'lucide-react';
 import clsx from 'clsx';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 
 const NAV_ITEMS = [
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { label: 'Importación', path: '/importacion', icon: FileSpreadsheet },
     { label: 'Reservas', path: '/bookings', icon: CalendarDays },
     { label: 'Viajes', path: '/trips', icon: Car },
     { label: 'Conductores', path: '/drivers', icon: UserCog },
@@ -50,10 +52,10 @@ export default function Sidebar() {
 
             <div className="sidebar-footer">
                 <div className="user-info">
-                    <div className="avatar">{user?.name?.charAt(0) || 'U'}</div>
+                    <div className="avatar">{user?.nombre?.charAt(0) || 'U'}</div>
                     <div className="details">
-                        <span className="name">{user?.name || 'Usuario'}</span>
-                        <span className="role">{user?.role || 'Guest'}</span>
+                        <span className="name">{user?.nombre || 'Usuario'}</span>
+                        <span className="role">{user?.rol || 'Guest'}</span>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
+import { importarExcel } from '../services/api';
 import { UploadCloud, CheckCircle, AlertTriangle } from 'lucide-react';
 
 const ExcelDropzone = () => {
@@ -11,18 +11,11 @@ const ExcelDropzone = () => {
     if (acceptedFiles.length === 0) return;
     
     const file = acceptedFiles[0];
-    const formData = new FormData();
-    formData.append('file', file);
 
     setUploadStatus('uploading');
-    
+
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/importacion/excel', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      
+      const response = await importarExcel(file);
       setUploadStatus('success');
       setMessage(response.data.message || 'Archivo procesado exitosamente.');
     } catch (error) {

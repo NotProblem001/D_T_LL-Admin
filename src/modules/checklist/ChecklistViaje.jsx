@@ -1,0 +1,139 @@
+import { useEffect, useState, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import clsx from 'clsx';
+import { CheckCircle2, XCircle, UserCheck, Loader2, ArrowLeft } from 'lucide-react';
+import { obtenerChecklist, guardarChecklist } from '../../services/api';
+
+const ESTADOS = [
+    { valor: 'SUBIO', label: 'Presente', icon: CheckCircle2, activoClass: 'bg-green-600 text-white border-green-600' },
+    { valor: 'NO_SHOW', label: 'Ausente', icon: XCircle, activoClass: 'bg-red-600 text-white border-red-600' },
+    { valor: 'CUENTA_PROPIA', label: 'Cuenta Propia', icon: UserCheck, activoClass: 'bg-amber-500 text-white border-amber-500' },
+];
+
+export default function ChecklistViaje() {
+    const { viajeId } = useParams();
+    const [items, setItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState('');
+    const [savedAt, setSavedAt] = useState(null);
+
+    const cargar = useCallback(async () => {
+        setIsLoading(true);
+        setError('');
+        try {
+            const data = await obtenerChecklist(viajeId);
+            setItems(data);
+        } catch (err) {
+            setError(err.response?.data?.error || 'No se pudo cargar el checklist del viaje.');
+        } finally {
+            setIsLoading(false);
+        }
+    }, [viajeId]);
+
+    useEffect(() => {
+        cargar();
+    }, [cargar]);
+
+    const marcar = (asistenciaId, estado) => {
+        setItems((prev) => prev.map((item) =>
+            item.asistenciaId === asistenciaId ? { ...item, estado } : item
+        ));
+        setSavedAt(null);
+    };
+
+    const guardarTodo = async () => {
+        setIsSaving(true);
+        setError('');
+        try {
+            const marcaciones = items.map(({ asistenciaId, estado }) => ({ asistenciaId, estado }));
+            const actualizado = await guardarChecklist(viajeId, marcaciones);
+            setItems(actualizado);
+            setSavedAt(new Date());
+        } catch (err) {
+            setError(err.response?.data?.error || 'No se pudo guardar el checklist.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const totalMarcados = items.filter((i) => i.estado !== 'PENDIENTE').length;
+
+    return (
+        <div className="max-w-2xl mx-auto pb-28">
+            <Link to="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
+                <ArrowLeft size={16} /> Volver
+            </Link>
+
+            <h1 className="text-xl font-bold text-gray-900 mb-1">Checklist de Asistencia</h1>
+            <p className="text-sm text-gray-500 mb-6">
+                Viaje {viajeId} · {totalMarcados}/{items.length} marcados
+            </p>
+
+            {error && (
+                <div className="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm p-3">
+                    {error}
+                </div>
+            )}
+
+            {isLoading ? (
+                <div className="flex items-center justify-center py-16 text-gray-400">
+                    <Loader2 className="animate-spin" size={28} />
+                </div>
+            ) : items.length === 0 ? (
+                <div className="text-center py-16 text-gray-400">No hay pasajeros asociados a este viaje.</div>
+            ) : (
+                <ul className="space-y-3">
+                    {items.map((item) => (
+                        <li
+                            key={item.asistenciaId}
+                            className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm"
+                        >
+                            <div className="mb-3">
+                                <p className="font-semibold text-gray-900">{item.nombreCompleto}</p>
+                                {item.puntoParadaAsignado && (
+                                    <p className="text-xs text-gray-500">{item.puntoParadaAsignado}</p>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2">
+                                {ESTADOS.map((opcion) => (
+                                    <button
+                                        key={opcion.valor}
+                                        type="button"
+                                        onClick={() => marcar(item.asistenciaId, opcion.valor)}
+                                        className={clsx(
+                                            'flex flex-col items-center justify-center gap-1 rounded-lg border py-3 text-xs font-medium transition-colors min-h-[64px]',
+                                            item.estado === opcion.valor
+                                                ? opcion.activoClass
+                                                : 'bg-gray-50 text-gray-500 border-gray-200 active:bg-gray-100'
+                                        )}
+                                    >
+                                        <opcion.icon size={20} />
+                                        {opcion.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            {items.length > 0 && (
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 flex items-center justify-between gap-4 sm:absolute sm:rounded-b-xl">
+                    <span className="text-xs text-gray-500">
+                        {savedAt ? `Guardado ${savedAt.toLocaleTimeString()}` : 'Cambios sin guardar'}
+                    </span>
+                    <button
+                        type="button"
+                        onClick={guardarTodo}
+                        disabled={isSaving}
+                        className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-semibold px-6 py-3 rounded-lg text-sm"
+                    >
+                        {isSaving ? 'Guardando...' : 'Guardar checklist'}
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}

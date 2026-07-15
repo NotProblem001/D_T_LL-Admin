@@ -1,9 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import AppLayout from '../components/layout/AppLayout';
 import Login from '../modules/auth/Login';
 import Dashboard from '../modules/dashboard/Dashboard';
 import PlaceholderPage from '../components/common/PlaceholderPage';
+import ExcelDropzone from '../components/ExcelDropzone';
+import ChecklistViaje from '../modules/checklist/ChecklistViaje';
 
 // Protected Route Wrapper
 function ProtectedRoute({ children }) {
@@ -26,6 +28,8 @@ export default function AppRoutes() {
                 </ProtectedRoute>
             }>
                 <Route index element={<Dashboard />} />
+                <Route path="importacion" element={<ExcelDropzone />} />
+                <Route path="viajes/:viajeId/checklist" element={<ChecklistViaje />} />
                 <Route path="bookings" element={<PlaceholderPage title="Gestión de Reservas" />} />
                 <Route path="trips" element={<PlaceholderPage title="Monitor de Viajes" />} />
                 <Route path="drivers" element={<PlaceholderPage title="Conductores" />} />

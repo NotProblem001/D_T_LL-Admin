@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth';
 
 export default function Login() {
-    const [email, setEmail] = useState('admin@example.com');
-    const [password, setPassword] = useState('admin');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,7 @@ export default function Login() {
             await login(email, password);
             navigate('/');
         } catch (err) {
-            setError(err);
+            setError(err.response?.data?.error || err.message || 'Error al iniciar sesión');
         } finally {
             setLoading(false);
         }

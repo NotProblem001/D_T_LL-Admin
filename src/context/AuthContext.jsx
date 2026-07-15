@@ -1,55 +1,58 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { loginAdmin } from '../services/api';
+import { AuthContext } from './authContextInstance';
 
-const AuthContext = createContext();
+function usuarioDesdeToken(token) {
+    const claims = jwtDecode(token);
+    return {
+        id: claims.sub,
+        nombre: claims.nombre,
+        rol: claims.rol,
+    };
+}
+
+function usuarioInicial() {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) return null;
+
+    try {
+        const decoded = usuarioDesdeToken(token);
+        if (decoded.rol !== 'ADMIN' || jwtDecode(token).exp * 1000 <= Date.now()) {
+            localStorage.removeItem('jwt_token');
+            return null;
+        }
+        return decoded;
+    } catch {
+        localStorage.removeItem('jwt_token');
+        return null;
+    }
+}
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(usuarioInicial);
 
-    useEffect(() => {
-        // Mock check for existing session
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+    const login = async (email, password) => {
+        const token = await loginAdmin(email, password);
+        const decoded = usuarioDesdeToken(token);
+        if (decoded.rol !== 'ADMIN') {
+            localStorage.removeItem('jwt_token');
+            throw new Error('Esta cuenta no tiene permisos de administrador');
         }
-        setLoading(false);
-    }, []);
-
-    const login = (email, password) => {
-        // Mock login logic
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (email === 'admin@example.com' && password === 'admin') {
-                    const mockUser = { id: 1, name: 'Admin User', email, role: 'ADMIN' };
-                    setUser(mockUser);
-                    localStorage.setItem('user', JSON.stringify(mockUser));
-                    resolve(mockUser);
-                } else {
-                    reject('Invalid credentials');
-                }
-            }, 1000);
-        });
+        setUser(decoded);
+        return decoded;
     };
 
     const logout = () => {
+        localStorage.removeItem('jwt_token');
         setUser(null);
-        localStorage.removeItem('user');
     };
 
-    const value = {
-        user,
-        login,
-        logout,
-        loading
-    };
+    const value = { user, login, logout, loading: false };
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
-}
-
-export function useAuth() {
-    return useContext(AuthContext);
 }
