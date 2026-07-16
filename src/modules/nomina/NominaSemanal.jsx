@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { CalendarDays, CheckCircle, AlertTriangle, Download, UploadCloud, Users, ClipboardPaste } from 'lucide-react';
+import { CalendarDays, CheckCircle, AlertTriangle, Download, UploadCloud, Users, ClipboardPaste, ClipboardList } from 'lucide-react';
 import {
     obtenerEmpresas,
     importarBddPasajeros,
     importarNominaSemanal,
     importarNominaTexto,
+    importarPlanillaInterna,
     descargarPlanillaHorarios,
 } from '../../services/api';
 
@@ -70,6 +71,8 @@ export default function NominaSemanal() {
     const subirNomina = (file) =>
         ejecutar(() => importarNominaSemanal(empresaId, file, anio || null, semana || null));
     const subirBdd = (file) => ejecutar(() => importarBddPasajeros(empresaId, file));
+    const subirPlanilla = (file) =>
+        ejecutar(() => importarPlanillaInterna(empresaId, file, anio || null, semana || null));
     const procesarTexto = () =>
         ejecutar(() => importarNominaTexto(empresaId, texto, anio || null, semana || null));
 
@@ -123,7 +126,7 @@ export default function NominaSemanal() {
                 </label>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div>
                     <h2 className="font-semibold mb-2 flex items-center gap-2 text-sm">
                         <CalendarDays size={16} /> 1. Nómina de turnos (SEM XX.xlsx)
@@ -137,6 +140,13 @@ export default function NominaSemanal() {
                     </h2>
                     <Dropzone onFile={subirBdd} disabled={cargando}
                         label="Arrastra aquí tu planilla histórica para poblar/actualizar la BDD" />
+                </div>
+                <div>
+                    <h2 className="font-semibold mb-2 flex items-center gap-2 text-sm">
+                        <ClipboardList size={16} /> Planilla de horarios (hojas Mañana/Tarde/Noche)
+                    </h2>
+                    <Dropzone onFile={subirPlanilla} disabled={cargando}
+                        label="Arrastra aquí una Planilla de horarios ya armada para cargarla como nómina" />
                 </div>
             </div>
 

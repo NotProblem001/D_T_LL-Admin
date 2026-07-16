@@ -92,6 +92,18 @@ export const importarNominaSemanal = async (empresaId, file, anio, semana) => {
     return response.data;
 };
 
+export const importarPlanillaInterna = async (empresaId, file, anio, semana) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const params = new URLSearchParams({ empresaId });
+    if (anio) params.append('anio', anio);
+    if (semana) params.append('semana', semana);
+    const response = await api.post(`/api/v1/importacion/planilla?${params}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+};
+
 export const importarNominaTexto = async (empresaId, texto, anio, semana) => {
     const response = await api.post('/api/v1/importacion/nomina/texto', { empresaId, texto, anio, semana });
     return response.data;
@@ -108,6 +120,23 @@ export const descargarPlanillaHorarios = async (empresaId, anio, semana) => {
     a.download = `Planilla horarios semana ${semana} ${anio}.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
+};
+
+// --- Vista de nómina / planilla con filtros ---
+
+export const listarNomina = async (empresaId, anio, filtros = {}) => {
+    const params = { empresaId, anio };
+    if (filtros.semana) params.semana = filtros.semana;
+    if (filtros.turno) params.turno = filtros.turno;
+    if (filtros.comuna) params.comuna = filtros.comuna;
+    if (filtros.busqueda) params.busqueda = filtros.busqueda;
+    const response = await api.get('/api/v1/admin/nomina', { params });
+    return response.data;
+};
+
+export const listarSemanasNomina = async (empresaId) => {
+    const response = await api.get('/api/v1/admin/nomina/semanas', { params: { empresaId } });
+    return response.data;
 };
 
 // --- Clientes (empresas) ---
