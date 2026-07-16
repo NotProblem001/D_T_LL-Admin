@@ -6,6 +6,7 @@ import Dashboard from '../modules/dashboard/Dashboard';
 import PlaceholderPage from '../components/common/PlaceholderPage';
 import ExcelDropzone from '../components/ExcelDropzone';
 import ChecklistViaje from '../modules/checklist/ChecklistViaje';
+import NominaSemanal from '../modules/nomina/NominaSemanal';
 
 // Protected Route Wrapper
 function ProtectedRoute({ children }) {
@@ -29,6 +30,7 @@ export default function AppRoutes() {
             }>
                 <Route index element={<Dashboard />} />
                 <Route path="importacion" element={<ExcelDropzone />} />
+                <Route path="nomina" element={<NominaSemanal />} />
                 <Route path="viajes/:viajeId/checklist" element={<ChecklistViaje />} />
                 <Route path="bookings" element={<PlaceholderPage title="Gestión de Reservas" />} />
                 <Route path="trips" element={<PlaceholderPage title="Monitor de Viajes" />} />

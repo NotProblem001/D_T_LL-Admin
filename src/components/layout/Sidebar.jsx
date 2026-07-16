@@ -16,6 +16,7 @@ import { useAuth } from '../../context/useAuth';
 const NAV_ITEMS = [
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
     { label: 'Importación', path: '/importacion', icon: FileSpreadsheet },
+    { label: 'Nómina semanal', path: '/nomina', icon: CalendarDays },
     { label: 'Reservas', path: '/bookings', icon: CalendarDays },
     { label: 'Viajes', path: '/trips', icon: Car },
     { label: 'Conductores', path: '/drivers', icon: UserCog },

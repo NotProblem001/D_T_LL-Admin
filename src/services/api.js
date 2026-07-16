@@ -60,4 +60,50 @@ export const optimizarRuta = async (viajeId, puntoInicio, destinoFinal) => {
     return response.data;
 };
 
+// --- Nómina semanal ---
+
+export const obtenerEmpresas = async () => {
+    const response = await api.get('/api/v1/empresa/empresas');
+    return response.data;
+};
+
+export const importarBddPasajeros = async (empresaId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post(`/api/v1/importacion/bdd?empresaId=${empresaId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+};
+
+export const importarNominaSemanal = async (empresaId, file, anio, semana) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const params = new URLSearchParams({ empresaId });
+    if (anio) params.append('anio', anio);
+    if (semana) params.append('semana', semana);
+    const response = await api.post(`/api/v1/importacion/nomina?${params}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+};
+
+export const importarNominaTexto = async (empresaId, texto, anio, semana) => {
+    const response = await api.post('/api/v1/importacion/nomina/texto', { empresaId, texto, anio, semana });
+    return response.data;
+};
+
+export const descargarPlanillaHorarios = async (empresaId, anio, semana) => {
+    const response = await api.get('/api/v1/importacion/nomina/planilla', {
+        params: { empresaId, anio, semana },
+        responseType: 'blob',
+    });
+    const url = URL.createObjectURL(response.data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Planilla horarios semana ${semana} ${anio}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
+};
+
 export default api;
