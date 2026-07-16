@@ -7,6 +7,7 @@ import PlaceholderPage from '../components/common/PlaceholderPage';
 import ExcelDropzone from '../components/ExcelDropzone';
 import ChecklistViaje from '../modules/checklist/ChecklistViaje';
 import NominaSemanal from '../modules/nomina/NominaSemanal';
+import Clientes from '../modules/clientes/Clientes';
 
 // Protected Route Wrapper
 function ProtectedRoute({ children }) {
@@ -36,7 +37,7 @@ export default function AppRoutes() {
                 <Route path="trips" element={<PlaceholderPage title="Monitor de Viajes" />} />
                 <Route path="drivers" element={<PlaceholderPage title="Conductores" />} />
                 <Route path="fleet" element={<PlaceholderPage title="Flota de Vehículos" />} />
-                <Route path="clients" element={<PlaceholderPage title="Clientes y Empresas" />} />
+                <Route path="clients" element={<Clientes />} />
                 <Route path="users" element={<PlaceholderPage title="Usuarios y Roles" />} />
                 <Route path="settings" element={<PlaceholderPage title="Configuración" />} />
             </Route>

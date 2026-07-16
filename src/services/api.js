@@ -23,8 +23,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        // 401: token vencido o inválido → cerrar sesión y volver al login.
+        if (error.response?.status === 401 && !error.config?.url?.startsWith('/auth')) {
             localStorage.removeItem('jwt_token');
+            if (window.location.pathname !== '/login') {
+                window.location.assign('/login');
+            }
         }
         return Promise.reject(error);
     }
@@ -104,6 +108,27 @@ export const descargarPlanillaHorarios = async (empresaId, anio, semana) => {
     a.download = `Planilla horarios semana ${semana} ${anio}.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
+};
+
+// --- Clientes (empresas) ---
+
+export const listarEmpresasAdmin = async () => {
+    const response = await api.get('/api/v1/admin/empresas');
+    return response.data;
+};
+
+export const crearEmpresa = async (empresa) => {
+    const response = await api.post('/api/v1/admin/empresas', empresa);
+    return response.data;
+};
+
+export const actualizarEmpresa = async (id, empresa) => {
+    const response = await api.put(`/api/v1/admin/empresas/${id}`, empresa);
+    return response.data;
+};
+
+export const eliminarEmpresa = async (id) => {
+    await api.delete(`/api/v1/admin/empresas/${id}`);
 };
 
 export default api;
