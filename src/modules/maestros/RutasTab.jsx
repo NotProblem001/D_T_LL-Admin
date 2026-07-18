@@ -18,6 +18,7 @@ const FORM_VACIO = {
     sectorIds: [],
     conductorHabitualId: '',
     vehiculoHabitualId: '',
+    grupoWhatsapp: '',
 };
 
 const nombreEmpresa = (e) => e.nombreFantasia || e.razonSocial || e.rutFiscal;
@@ -72,6 +73,7 @@ export default function RutasTab() {
             sectorIds: (r.sectores || []).map((s) => s.id),
             conductorHabitualId: r.conductorHabitualId || '',
             vehiculoHabitualId: r.vehiculoHabitualId || '',
+            grupoWhatsapp: r.grupoWhatsapp || '',
         });
         setErrorForm('');
         setDrawerAbierto(true);
@@ -225,6 +227,14 @@ export default function RutasTab() {
                                 </option>
                             ))}
                         </select>
+                    </Campo>
+                    <Campo label="Grupo de WhatsApp (nombre o enlace)">
+                        <input
+                            value={form.grupoWhatsapp}
+                            onChange={actualizarCampo('grupoWhatsapp')}
+                            placeholder="Entrada mañana Santiago / https://chat.whatsapp.com/…"
+                            className={inputClass}
+                        />
                     </Campo>
 
                     <ErrorBox mensaje={errorForm} />

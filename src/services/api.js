@@ -250,6 +250,17 @@ export const eliminarViajeBorrador = async (viajeId) => {
     await api.delete(`/api/v1/planificacion/viajes/${viajeId}`);
 };
 
+// --- Mensajería WhatsApp por recorrido (Etapa 5) ---
+
+export const obtenerMensajeriaViaje = async (viajeId) =>
+    (await api.get(`/api/v1/mensajeria/viajes/${viajeId}`)).data;
+
+export const guardarMensajeViaje = async (viajeId, payload) =>
+    (await api.post(`/api/v1/mensajeria/viajes/${viajeId}`, payload)).data;
+
+export const marcarMensajeEnviado = async (mensajeId) =>
+    (await api.post(`/api/v1/mensajeria/mensajes/${mensajeId}/enviado`)).data;
+
 // --- Maestros (lectura ADMIN/OPERADOR, escritura solo ADMIN) ---
 
 const crudMaestro = (recurso) => ({

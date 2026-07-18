@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { CalendarRange, Wand2, Trash2, AlertTriangle, Save } from 'lucide-react';
+import { CalendarRange, Wand2, Trash2, AlertTriangle, Save, MessageCircle } from 'lucide-react';
+import MensajeViaje from './MensajeViaje';
 import {
     obtenerEmpresas,
     generarPropuestaViajes,
@@ -55,6 +56,7 @@ export default function Planificacion() {
     const [cargando, setCargando] = useState(false);
     const [generando, setGenerando] = useState(false);
     const [error, setError] = useState('');
+    const [viajeMensaje, setViajeMensaje] = useState(null);
 
     useEffect(() => {
         obtenerEmpresas().then((es) => {
@@ -251,6 +253,13 @@ export default function Planificacion() {
                                         <code>{v.codigoRutaLogin}</code>
                                     </span>
                                     <div className="ml-auto flex items-center gap-2">
+                                        <button
+                                            onClick={() => setViajeMensaje(v)}
+                                            className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border border-green-300 bg-green-50 text-green-700 hover:bg-green-100"
+                                            title="Mensaje WhatsApp del recorrido"
+                                        >
+                                            <MessageCircle size={14} /> Mensaje
+                                        </button>
                                         {editable(v) && (
                                             <select
                                                 value={v.estado}
@@ -322,6 +331,10 @@ export default function Planificacion() {
                         );
                     })}
                 </div>
+            )}
+
+            {viajeMensaje && (
+                <MensajeViaje viaje={viajeMensaje} onClose={() => setViajeMensaje(null)} />
             )}
         </div>
     );
