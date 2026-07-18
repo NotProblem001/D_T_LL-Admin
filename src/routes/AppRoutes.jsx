@@ -17,6 +17,7 @@ import Incidencias from '../modules/incidencias/Incidencias';
 import MisViajesConductor from '../modules/conductor/MisViajesConductor';
 import ViajeConductor from '../modules/conductor/ViajeConductor';
 import Maestros from '../modules/maestros/Maestros';
+import Historial from '../modules/historial/Historial';
 
 // Protected Route Wrapper. El rol CONDUCTOR solo usa la vista móvil /conductor.
 function ProtectedRoute({ children, soloConductor = false }) {
@@ -61,6 +62,7 @@ export default function AppRoutes() {
                 <Route path="bookings" element={<PlaceholderPage title="Gestión de Reservas" />} />
                 <Route path="trips" element={<Planificacion />} />
                 <Route path="incidencias" element={<Incidencias />} />
+                <Route path="historial" element={<Historial />} />
                 <Route path="drivers" element={<Conductores />} />
                 <Route path="fleet" element={<Vehiculos />} />
                 <Route path="maestros" element={<Maestros />} />

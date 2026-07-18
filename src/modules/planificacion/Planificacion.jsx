@@ -122,10 +122,21 @@ export default function Planificacion() {
     const guardarAsignacion = async (viaje) => {
         setError('');
         const sel = seleccion[viaje.id] || {};
+        // Reemplazar una asignación existente exige motivo (queda en el historial de cambios).
+        const cambiaConductor = viaje.conductorId && sel.conductorId !== viaje.conductorId;
+        const cambiaVehiculo = viaje.vehiculoId && sel.vehiculoId !== viaje.vehiculoId;
+        let motivo = null;
+        if (cambiaConductor || cambiaVehiculo) {
+            motivo = window.prompt(
+                `Motivo del cambio de ${cambiaConductor && cambiaVehiculo ? 'conductor y vehículo'
+                    : cambiaConductor ? 'conductor' : 'vehículo'} (queda registrado):`);
+            if (!motivo || !motivo.trim()) return;
+        }
         try {
             await asignarViaje(viaje.id, {
                 conductorId: sel.conductorId || null,
                 vehiculoId: sel.vehiculoId || null,
+                motivo,
             });
             await cargarViajes();
         } catch (e) {

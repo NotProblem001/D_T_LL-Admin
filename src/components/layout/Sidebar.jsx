@@ -12,7 +12,8 @@ import {
     ClipboardList,
     Map,
     FileSearch,
-    AlertTriangle
+    AlertTriangle,
+    History
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuth';
@@ -26,6 +27,7 @@ const NAV_ITEMS = [
     { label: 'Reservas', path: '/bookings', icon: CalendarDays },
     { label: 'Planificación', path: '/trips', icon: Car },
     { label: 'Incidencias', path: '/incidencias', icon: AlertTriangle },
+    { label: 'Historial', path: '/historial', icon: History },
     { label: 'Conductores', path: '/drivers', icon: UserCog },
     { label: 'Flota', path: '/fleet', icon: Truck },
     { label: 'Maestros', path: '/maestros', icon: Map },

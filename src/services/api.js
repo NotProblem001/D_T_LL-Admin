@@ -250,6 +250,17 @@ export const eliminarViajeBorrador = async (viajeId) => {
     await api.delete(`/api/v1/planificacion/viajes/${viajeId}`);
 };
 
+// --- Historial de recorridos y auditoría (Etapa 6) ---
+
+export const buscarHistorialViajes = async (filtros) =>
+    (await api.get('/api/v1/historial/viajes', { params: filtros })).data;
+
+export const detalleHistorialViaje = async (viajeId) =>
+    (await api.get(`/api/v1/historial/viajes/${viajeId}`)).data;
+
+export const listarAuditoria = async (modulo) =>
+    (await api.get('/api/v1/historial/auditoria', { params: modulo ? { modulo } : {} })).data;
+
 // --- Mensajería WhatsApp por recorrido (Etapa 5) ---
 
 export const obtenerMensajeriaViaje = async (viajeId) =>
