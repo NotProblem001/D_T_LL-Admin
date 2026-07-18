@@ -160,6 +160,41 @@ export const eliminarEmpresa = async (id) => {
     await api.delete(`/api/v1/admin/empresas/${id}`);
 };
 
+// --- Importación con revisión (staging → resolver → confirmar) ---
+
+export const previewImportacion = async (empresaId, tipo, file, anio, semana) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const params = new URLSearchParams({ empresaId, tipo });
+    if (anio) params.append('anio', anio);
+    if (semana) params.append('semana', semana);
+    const response = await api.post(`/api/v1/importacion/revision/preview?${params}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+};
+
+export const previewImportacionTexto = async (payload) =>
+    (await api.post('/api/v1/importacion/revision/preview/texto', payload)).data;
+
+export const listarImportaciones = async (empresaId) =>
+    (await api.get('/api/v1/importacion/revision', { params: { empresaId } })).data;
+
+export const obtenerImportacion = async (id) =>
+    (await api.get(`/api/v1/importacion/revision/${id}`)).data;
+
+export const resolverRegistroImportacion = async (importacionId, registroId, payload) =>
+    (await api.put(`/api/v1/importacion/revision/${importacionId}/registros/${registroId}`, payload)).data;
+
+export const confirmarImportacion = async (id) =>
+    (await api.post(`/api/v1/importacion/revision/${id}/confirmar`)).data;
+
+export const descartarImportacion = async (id) =>
+    (await api.post(`/api/v1/importacion/revision/${id}/descartar`)).data;
+
+export const listarPasajerosEmpresa = async (empresaId) =>
+    (await api.get('/api/v1/empresa/pasajeros', { params: { empresaId } })).data;
+
 // --- Maestros (lectura ADMIN/OPERADOR, escritura solo ADMIN) ---
 
 const crudMaestro = (recurso) => ({
@@ -176,6 +211,8 @@ export const sectoresApi = crudMaestro('sectores');
 export const rutasApi = crudMaestro('rutas');
 export const turnosApi = crudMaestro('turnos');
 export const estadosAsistenciaApi = crudMaestro('estados-asistencia');
+
+export const conductoresApi = crudMaestro('conductores');
 
 export const listarConductores = async () =>
     (await api.get('/api/v1/maestros/conductores')).data;
