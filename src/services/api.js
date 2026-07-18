@@ -160,4 +160,30 @@ export const eliminarEmpresa = async (id) => {
     await api.delete(`/api/v1/admin/empresas/${id}`);
 };
 
+// --- Maestros (lectura ADMIN/OPERADOR, escritura solo ADMIN) ---
+
+const crudMaestro = (recurso) => ({
+    listar: async (params) => (await api.get(`/api/v1/maestros/${recurso}`, { params })).data,
+    crear: async (payload) => (await api.post(`/api/v1/maestros/${recurso}`, payload)).data,
+    actualizar: async (id, payload) => (await api.put(`/api/v1/maestros/${recurso}/${id}`, payload)).data,
+    cambiarActivo: async (id, activo) =>
+        (await api.patch(`/api/v1/maestros/${recurso}/${id}/activo`, { activo })).data,
+});
+
+export const vehiculosApi = crudMaestro('vehiculos');
+export const comunasApi = crudMaestro('comunas');
+export const sectoresApi = crudMaestro('sectores');
+export const rutasApi = crudMaestro('rutas');
+export const turnosApi = crudMaestro('turnos');
+export const estadosAsistenciaApi = crudMaestro('estados-asistencia');
+
+export const listarConductores = async () =>
+    (await api.get('/api/v1/maestros/conductores')).data;
+
+export const listarConfiguraciones = async () =>
+    (await api.get('/api/v1/maestros/configuraciones')).data;
+
+export const actualizarConfiguracion = async (clave, valor) =>
+    (await api.put(`/api/v1/maestros/configuraciones/${clave}`, { valor })).data;
+
 export default api;

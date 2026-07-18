@@ -9,7 +9,8 @@ import {
     Settings,
     Truck,
     FileSpreadsheet,
-    ClipboardList
+    ClipboardList,
+    Map
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuth';
@@ -23,6 +24,7 @@ const NAV_ITEMS = [
     { label: 'Viajes', path: '/trips', icon: Car },
     { label: 'Conductores', path: '/drivers', icon: UserCog },
     { label: 'Flota', path: '/fleet', icon: Truck },
+    { label: 'Maestros', path: '/maestros', icon: Map },
     { label: 'Clientes', path: '/clients', icon: Briefcase },
     { label: 'Usuarios', path: '/users', icon: Users },
     { label: 'Configuración', path: '/settings', icon: Settings },
