@@ -12,6 +12,7 @@ import PlanillaHorarios from '../modules/planilla/PlanillaHorarios';
 import Vehiculos from '../modules/flota/Vehiculos';
 import Conductores from '../modules/conductores/Conductores';
 import RevisionImportacion from '../modules/importacion/RevisionImportacion';
+import Planificacion from '../modules/planificacion/Planificacion';
 import Maestros from '../modules/maestros/Maestros';
 
 // Protected Route Wrapper
@@ -41,7 +42,7 @@ export default function AppRoutes() {
                 <Route path="planilla" element={<PlanillaHorarios />} />
                 <Route path="viajes/:viajeId/checklist" element={<ChecklistViaje />} />
                 <Route path="bookings" element={<PlaceholderPage title="Gestión de Reservas" />} />
-                <Route path="trips" element={<PlaceholderPage title="Monitor de Viajes" />} />
+                <Route path="trips" element={<Planificacion />} />
                 <Route path="drivers" element={<Conductores />} />
                 <Route path="fleet" element={<Vehiculos />} />
                 <Route path="maestros" element={<Maestros />} />

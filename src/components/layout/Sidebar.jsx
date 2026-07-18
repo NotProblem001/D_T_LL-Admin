@@ -23,7 +23,7 @@ const NAV_ITEMS = [
     { label: 'Nómina semanal', path: '/nomina', icon: CalendarDays },
     { label: 'Planilla horarios', path: '/planilla', icon: ClipboardList },
     { label: 'Reservas', path: '/bookings', icon: CalendarDays },
-    { label: 'Viajes', path: '/trips', icon: Car },
+    { label: 'Planificación', path: '/trips', icon: Car },
     { label: 'Conductores', path: '/drivers', icon: UserCog },
     { label: 'Flota', path: '/fleet', icon: Truck },
     { label: 'Maestros', path: '/maestros', icon: Map },

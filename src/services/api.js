@@ -195,6 +195,24 @@ export const descartarImportacion = async (id) =>
 export const listarPasajerosEmpresa = async (empresaId) =>
     (await api.get('/api/v1/empresa/pasajeros', { params: { empresaId } })).data;
 
+// --- Planificación de recorridos (Etapa 3) ---
+
+export const generarPropuestaViajes = async (payload) =>
+    (await api.post('/api/v1/planificacion/generar', payload)).data;
+
+export const listarViajesPlanificacion = async (empresaId, fecha) =>
+    (await api.get('/api/v1/planificacion/viajes', { params: { empresaId, fecha } })).data;
+
+export const asignarViaje = async (viajeId, payload) =>
+    (await api.put(`/api/v1/planificacion/viajes/${viajeId}/asignacion`, payload)).data;
+
+export const cambiarEstadoViaje = async (viajeId, estado) =>
+    (await api.put(`/api/v1/planificacion/viajes/${viajeId}/estado`, { estado })).data;
+
+export const eliminarViajeBorrador = async (viajeId) => {
+    await api.delete(`/api/v1/planificacion/viajes/${viajeId}`);
+};
+
 // --- Maestros (lectura ADMIN/OPERADOR, escritura solo ADMIN) ---
 
 const crudMaestro = (recurso) => ({
