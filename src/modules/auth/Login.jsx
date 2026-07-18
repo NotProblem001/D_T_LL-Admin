@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 
 export default function Login() {
+    const [modo, setModo] = useState('admin'); // 'admin' | 'conductor'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rut, setRut] = useState('');
+    const [pin, setPin] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { login } = useAuth();
+    const { login, loginConductor } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -17,8 +20,13 @@ export default function Login() {
         setLoading(true);
 
         try {
-            await login(email, password);
-            navigate('/');
+            if (modo === 'admin') {
+                await login(email, password);
+                navigate('/');
+            } else {
+                await loginConductor(rut, pin);
+                navigate('/conductor');
+            }
         } catch (err) {
             setError(err.response?.data?.error || err.message || 'Error al iniciar sesión');
         } finally {
@@ -30,30 +38,74 @@ export default function Login() {
         <div className="login-container">
             <div className="login-card">
                 <h1>Iniciar Sesión</h1>
-                <p className="subtitle">Admin Panel</p>
+                <p className="subtitle">Donde Te Llevo</p>
+
+                <div className="tabs">
+                    <button
+                        type="button"
+                        className={modo === 'admin' ? 'tab active' : 'tab'}
+                        onClick={() => { setModo('admin'); setError(''); }}
+                    >
+                        Administración
+                    </button>
+                    <button
+                        type="button"
+                        className={modo === 'conductor' ? 'tab active' : 'tab'}
+                        onClick={() => { setModo('conductor'); setError(''); }}
+                    >
+                        Soy conductor
+                    </button>
+                </div>
 
                 {error && <div className="error-alert">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Contraseña</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
+                    {modo === 'admin' ? (
+                        <>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Contraseña</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="form-group">
+                                <label>RUT</label>
+                                <input
+                                    value={rut}
+                                    onChange={(e) => setRut(e.target.value)}
+                                    placeholder="12.345.678-9"
+                                    autoComplete="username"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>PIN</label>
+                                <input
+                                    type="password"
+                                    inputMode="numeric"
+                                    value={pin}
+                                    onChange={(e) => setPin(e.target.value)}
+                                    placeholder="••••"
+                                    required
+                                />
+                            </div>
+                        </>
+                    )}
 
                     <button type="submit" disabled={loading}>
                         {loading ? 'Cargando...' : 'Ingresar'}
@@ -89,7 +141,30 @@ export default function Login() {
         .subtitle {
           text-align: center;
           color: var(--text-muted);
-          margin-bottom: 2rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .tabs {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .tab {
+          flex: 1;
+          padding: 0.6rem;
+          border: 1px solid var(--border);
+          border-radius: 0.5rem;
+          background: transparent;
+          color: var(--text-muted);
+          font-weight: 500;
+          font-size: 0.875rem;
+        }
+
+        .tab.active {
+          background-color: var(--primary);
+          border-color: var(--primary);
+          color: white;
         }
 
         .form-group {
@@ -117,7 +192,7 @@ export default function Login() {
           box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        button {
+        form > button {
           width: 100%;
           padding: 0.75rem;
           background-color: var(--primary);
@@ -129,11 +204,11 @@ export default function Login() {
           transition: background-color 0.2s;
         }
 
-        button:hover {
+        form > button:hover {
           background-color: var(--primary-hover);
         }
 
-        button:disabled {
+        form > button:disabled {
           opacity: 0.7;
           cursor: not-allowed;
         }

@@ -40,6 +40,43 @@ export const loginAdmin = async (email, password) => {
     return response.data;
 };
 
+export const loginConductorApi = async (rutConductor, pin) => {
+    const response = await api.post('/auth/conductor/login', { rutConductor, pin });
+    localStorage.setItem('jwt_token', response.data);
+    return response.data;
+};
+
+// --- Vista móvil del conductor (Etapa 4) ---
+
+export const misViajesConductor = async (fecha) =>
+    (await api.get('/api/v1/conductor/viajes', { params: fecha ? { fecha } : {} })).data;
+
+export const detalleViajeConductor = async (viajeId) =>
+    (await api.get(`/api/v1/conductor/viajes/${viajeId}`)).data;
+
+export const confirmarViajeConductor = async (viajeId) =>
+    (await api.post(`/api/v1/conductor/viajes/${viajeId}/confirmar`)).data;
+
+export const iniciarViajeConductor = async (viajeId) =>
+    (await api.post(`/api/v1/conductor/viajes/${viajeId}/iniciar`)).data;
+
+export const finalizarViajeConductor = async (viajeId) =>
+    (await api.post(`/api/v1/conductor/viajes/${viajeId}/finalizar`)).data;
+
+export const estadosAsistenciaConductor = async () =>
+    (await api.get('/api/v1/conductor/estados-asistencia')).data;
+
+// --- Incidencias ---
+
+export const crearIncidencia = async (payload) =>
+    (await api.post('/api/v1/incidencias', payload)).data;
+
+export const listarIncidencias = async (filtros = {}) =>
+    (await api.get('/api/v1/incidencias', { params: filtros })).data;
+
+export const actualizarIncidencia = async (id, payload) =>
+    (await api.put(`/api/v1/incidencias/${id}`, payload)).data;
+
 export const importarExcel = async (file, onUploadProgress) => {
     const formData = new FormData();
     formData.append('file', file);

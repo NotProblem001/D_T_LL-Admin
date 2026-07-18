@@ -1,18 +1,23 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { CheckCircle2, XCircle, UserCheck, Loader2, ArrowLeft } from 'lucide-react';
-import { obtenerChecklist, guardarChecklist } from '../../services/api';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import { obtenerChecklist, guardarChecklist, estadosAsistenciaApi } from '../../services/api';
 
-const ESTADOS = [
-    { valor: 'SUBIO', label: 'Presente', icon: CheckCircle2, activoClass: 'bg-green-600 text-white border-green-600' },
-    { valor: 'NO_SHOW', label: 'Ausente', icon: XCircle, activoClass: 'bg-red-600 text-white border-red-600' },
-    { valor: 'CUENTA_PROPIA', label: 'Cuenta Propia', icon: UserCheck, activoClass: 'bg-amber-500 text-white border-amber-500' },
-];
+// Colores por código conocido; los estados nuevos usan el color por defecto.
+const COLORES = {
+    ASISTIO: 'bg-green-600 text-white border-green-600',
+    NO_ASISTIO: 'bg-red-600 text-white border-red-600',
+    AVISO_PREVIO: 'bg-amber-500 text-white border-amber-500',
+    NO_UTILIZA_TRANSPORTE: 'bg-gray-500 text-white border-gray-500',
+    MEDIOS_PROPIOS: 'bg-blue-500 text-white border-blue-500',
+};
 
 export default function ChecklistViaje() {
     const { viajeId } = useParams();
     const [items, setItems] = useState([]);
+    const [originales, setOriginales] = useState({}); // asistenciaId -> estado guardado en servidor
+    const [estados, setEstados] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
@@ -24,6 +29,7 @@ export default function ChecklistViaje() {
         try {
             const data = await obtenerChecklist(viajeId);
             setItems(data);
+            setOriginales(Object.fromEntries(data.map((i) => [i.asistenciaId, i.estado])));
         } catch (err) {
             setError(err.response?.data?.error || 'No se pudo cargar el checklist del viaje.');
         } finally {
@@ -33,6 +39,9 @@ export default function ChecklistViaje() {
 
     useEffect(() => {
         cargar();
+        estadosAsistenciaApi.listar()
+            .then((es) => setEstados(es.filter((e) => e.activo)))
+            .catch(() => setEstados([]));
     }, [cargar]);
 
     const marcar = (asistenciaId, estado) => {
@@ -46,12 +55,38 @@ export default function ChecklistViaje() {
         setIsSaving(true);
         setError('');
         try {
-            const marcaciones = items.map(({ asistenciaId, estado }) => ({ asistenciaId, estado }));
-            const actualizado = await guardarChecklist(viajeId, marcaciones);
-            setItems(actualizado);
+            const marcaciones = [];
+            for (const item of items) {
+                const original = originales[item.asistenciaId];
+                if (item.estado === original) continue;
+
+                const config = estados.find((e) => e.codigo === item.estado);
+                let observaciones = item.observaciones || null;
+                if (config?.requiereObservacion && !observaciones) {
+                    observaciones = window.prompt(
+                        `"${config.nombre}" exige observación para ${item.nombreCompleto}:`) || '';
+                    if (!observaciones.trim()) {
+                        throw new Error(`Falta la observación de ${item.nombreCompleto}`);
+                    }
+                }
+                let motivo = null;
+                if (original !== 'PENDIENTE') {
+                    motivo = window.prompt(
+                        `Motivo de la corrección para ${item.nombreCompleto} (queda en historial):`) || '';
+                    if (!motivo.trim()) {
+                        throw new Error(`Falta el motivo de corrección de ${item.nombreCompleto}`);
+                    }
+                }
+                marcaciones.push({ asistenciaId: item.asistenciaId, estado: item.estado, observaciones, motivo });
+            }
+            if (marcaciones.length > 0) {
+                const actualizado = await guardarChecklist(viajeId, marcaciones);
+                setItems(actualizado);
+                setOriginales(Object.fromEntries(actualizado.map((i) => [i.asistenciaId, i.estado])));
+            }
             setSavedAt(new Date());
         } catch (err) {
-            setError(err.response?.data?.error || 'No se pudo guardar el checklist.');
+            setError(err.response?.data?.error || err.message || 'No se pudo guardar el checklist.');
         } finally {
             setIsSaving(false);
         }
@@ -91,29 +126,34 @@ export default function ChecklistViaje() {
                         >
                             <div className="mb-3">
                                 <p className="font-semibold text-gray-900">{item.nombreCompleto}</p>
-                                {item.puntoParadaAsignado && (
-                                    <p className="text-xs text-gray-500">{item.puntoParadaAsignado}</p>
+                                {(item.direccion || item.puntoParadaAsignado) && (
+                                    <p className="text-xs text-gray-500">
+                                        {item.direccion || item.puntoParadaAsignado}
+                                        {item.comuna ? `, ${item.comuna}` : ''}
+                                    </p>
                                 )}
                             </div>
 
                             <div className="grid grid-cols-3 gap-2">
-                                {ESTADOS.map((opcion) => (
+                                {estados.map((opcion) => (
                                     <button
-                                        key={opcion.valor}
+                                        key={opcion.codigo}
                                         type="button"
-                                        onClick={() => marcar(item.asistenciaId, opcion.valor)}
+                                        onClick={() => marcar(item.asistenciaId, opcion.codigo)}
                                         className={clsx(
-                                            'flex flex-col items-center justify-center gap-1 rounded-lg border py-3 text-xs font-medium transition-colors min-h-[64px]',
-                                            item.estado === opcion.valor
-                                                ? opcion.activoClass
+                                            'flex items-center justify-center rounded-lg border py-3 px-1 text-xs font-medium transition-colors min-h-[56px] text-center',
+                                            item.estado === opcion.codigo
+                                                ? (COLORES[opcion.codigo] || 'bg-blue-600 text-white border-blue-600')
                                                 : 'bg-gray-50 text-gray-500 border-gray-200 active:bg-gray-100'
                                         )}
                                     >
-                                        <opcion.icon size={20} />
-                                        {opcion.label}
+                                        {opcion.nombre}
                                     </button>
                                 ))}
                             </div>
+                            {item.observaciones && (
+                                <p className="mt-2 text-xs text-gray-500">Obs: {item.observaciones}</p>
+                            )}
                         </li>
                     ))}
                 </ul>

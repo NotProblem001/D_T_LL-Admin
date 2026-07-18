@@ -13,14 +13,19 @@ import Vehiculos from '../modules/flota/Vehiculos';
 import Conductores from '../modules/conductores/Conductores';
 import RevisionImportacion from '../modules/importacion/RevisionImportacion';
 import Planificacion from '../modules/planificacion/Planificacion';
+import Incidencias from '../modules/incidencias/Incidencias';
+import MisViajesConductor from '../modules/conductor/MisViajesConductor';
+import ViajeConductor from '../modules/conductor/ViajeConductor';
 import Maestros from '../modules/maestros/Maestros';
 
-// Protected Route Wrapper
-function ProtectedRoute({ children }) {
+// Protected Route Wrapper. El rol CONDUCTOR solo usa la vista móvil /conductor.
+function ProtectedRoute({ children, soloConductor = false }) {
     const { user, loading } = useAuth();
 
     if (loading) return <div>Cargando...</div>;
     if (!user) return <Navigate to="/login" replace />;
+    if (soloConductor && user.rol !== 'CONDUCTOR') return <Navigate to="/" replace />;
+    if (!soloConductor && user.rol === 'CONDUCTOR') return <Navigate to="/conductor" replace />;
 
     return children;
 }
@@ -29,6 +34,18 @@ export default function AppRoutes() {
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
+
+            {/* Vista móvil del conductor (sin sidebar de administración) */}
+            <Route path="/conductor" element={
+                <ProtectedRoute soloConductor>
+                    <MisViajesConductor />
+                </ProtectedRoute>
+            } />
+            <Route path="/conductor/viajes/:viajeId" element={
+                <ProtectedRoute soloConductor>
+                    <ViajeConductor />
+                </ProtectedRoute>
+            } />
 
             <Route path="/" element={
                 <ProtectedRoute>
@@ -43,6 +60,7 @@ export default function AppRoutes() {
                 <Route path="viajes/:viajeId/checklist" element={<ChecklistViaje />} />
                 <Route path="bookings" element={<PlaceholderPage title="Gestión de Reservas" />} />
                 <Route path="trips" element={<Planificacion />} />
+                <Route path="incidencias" element={<Incidencias />} />
                 <Route path="drivers" element={<Conductores />} />
                 <Route path="fleet" element={<Vehiculos />} />
                 <Route path="maestros" element={<Maestros />} />
