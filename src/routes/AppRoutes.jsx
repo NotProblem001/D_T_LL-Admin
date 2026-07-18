@@ -11,6 +11,7 @@ import Clientes from '../modules/clientes/Clientes';
 import PlanillaHorarios from '../modules/planilla/PlanillaHorarios';
 import Vehiculos from '../modules/flota/Vehiculos';
 import Conductores from '../modules/conductores/Conductores';
+import RevisionImportacion from '../modules/importacion/RevisionImportacion';
 import Maestros from '../modules/maestros/Maestros';
 
 // Protected Route Wrapper
@@ -35,6 +36,7 @@ export default function AppRoutes() {
             }>
                 <Route index element={<Dashboard />} />
                 <Route path="importacion" element={<ExcelDropzone />} />
+                <Route path="revision" element={<RevisionImportacion />} />
                 <Route path="nomina" element={<NominaSemanal />} />
                 <Route path="planilla" element={<PlanillaHorarios />} />
                 <Route path="viajes/:viajeId/checklist" element={<ChecklistViaje />} />
