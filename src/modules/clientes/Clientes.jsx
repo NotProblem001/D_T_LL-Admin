@@ -120,6 +120,7 @@ export default function Clientes() {
         { header: 'RUT', accessor: 'rutFiscal', width: '130px' },
         {
             header: 'Empresa',
+            sortValue: (row) => row.nombreFantasia || row.razonSocial || '',
             cell: (row) => (
                 <div>
                     <div className="font-medium">{row.nombreFantasia || row.razonSocial}</div>
@@ -131,6 +132,7 @@ export default function Clientes() {
         },
         {
             header: 'Contacto',
+            sortValue: (row) => row.contactoNombre || '',
             cell: (row) => (
                 <div>
                     <div>{row.contactoNombre || '—'}</div>
@@ -143,6 +145,7 @@ export default function Clientes() {
         {
             header: 'Tarifa base',
             width: '120px',
+            sortKey: 'tarifaBaseViaje',
             cell: (row) =>
                 row.tarifaBaseViaje != null
                     ? `$${Number(row.tarifaBaseViaje).toLocaleString('es-CL')}`

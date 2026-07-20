@@ -77,15 +77,6 @@ export const listarIncidencias = async (filtros = {}) =>
 export const actualizarIncidencia = async (id, payload) =>
     (await api.put(`/api/v1/incidencias/${id}`, payload)).data;
 
-export const importarExcel = async (file, onUploadProgress) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    return api.post('/api/v1/importacion/excel', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress,
-    });
-};
-
 export const obtenerChecklist = async (viajeId) => {
     const response = await api.get(`/api/v1/checklist/${viajeId}`);
     return response.data;
@@ -248,6 +239,27 @@ export const cambiarEstadoViaje = async (viajeId, estado) =>
 
 export const eliminarViajeBorrador = async (viajeId) => {
     await api.delete(`/api/v1/planificacion/viajes/${viajeId}`);
+};
+
+// --- Informes y dashboard (Etapa 7) ---
+
+export const obtenerDashboard = async (empresaId, fecha) =>
+    (await api.get('/api/v1/informes/dashboard', { params: { empresaId, ...(fecha && { fecha }) } })).data;
+
+export const obtenerResumenInterno = async (empresaId, desde, hasta) =>
+    (await api.get('/api/v1/informes/interno', { params: { empresaId, desde, hasta } })).data;
+
+export const descargarInformeSemanal = async (empresaId, desde, hasta) => {
+    const response = await api.get('/api/v1/informes/semanal', {
+        params: { empresaId, desde, hasta },
+        responseType: 'blob',
+    });
+    const url = URL.createObjectURL(response.data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Informe semanal ${desde} al ${hasta}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
 };
 
 // --- Historial de recorridos y auditoría (Etapa 6) ---

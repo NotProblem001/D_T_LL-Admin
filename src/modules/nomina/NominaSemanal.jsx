@@ -92,11 +92,12 @@ export default function NominaSemanal() {
     return (
         <div className="max-w-5xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <CalendarDays className="text-blue-600" /> Nómina semanal
+                <CalendarDays className="text-blue-600" /> Importación
             </h1>
             <p className="text-gray-500 mb-6 text-sm">
-                Importa los turnos que envía la empresa cliente (Excel &quot;SEM XX&quot; o texto del correo),
-                crúzalos con la BDD de pasajeros y descarga la Planilla de Horarios lista.
+                Selecciona la empresa y sube el archivo: cada importación queda en la tabla de esa
+                empresa (BDD de pasajeros, nómina &quot;SEM XX&quot;, planilla o texto del correo).
+                Para revisar coincidencias antes de guardar usa &quot;Revisar importación&quot;.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">

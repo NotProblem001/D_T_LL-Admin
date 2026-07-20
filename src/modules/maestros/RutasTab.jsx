@@ -118,17 +118,18 @@ export default function RutasTab() {
     };
 
     const columns = [
-        { header: 'Ruta', cell: (row) => <span className="font-medium">{row.nombre}</span> },
+        { header: 'Ruta', sortKey: 'nombre', cell: (row) => <span className="font-medium">{row.nombre}</span> },
         {
             header: 'Sectores',
+            sortValue: (row) => (row.sectores || []).length,
             cell: (row) =>
                 (row.sectores || []).length
                     ? (row.sectores || []).map((s) => s.nombre).join(', ')
                     : '—',
         },
-        { header: 'Conductor habitual', cell: (row) => row.conductorHabitualNombre || '—' },
-        { header: 'Vehículo habitual', width: '130px', cell: (row) => row.vehiculoHabitualPatente || '—' },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Conductor habitual', sortKey: 'conductorHabitualNombre', cell: (row) => row.conductorHabitualNombre || '—' },
+        { header: 'Vehículo habitual', width: '130px', sortKey: 'vehiculoHabitualPatente', cell: (row) => row.vehiculoHabitualPatente || '—' },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',

@@ -116,14 +116,15 @@ export default function ConfigTab() {
 
     const columnasEstados = [
         { header: 'Orden', width: '70px', accessor: 'orden' },
-        { header: 'Código', width: '210px', cell: (row) => <code className="text-xs">{row.codigo}</code> },
-        { header: 'Nombre', cell: (row) => <span className="font-medium">{row.nombre}</span> },
+        { header: 'Código', width: '210px', sortKey: 'codigo', cell: (row) => <code className="text-xs">{row.codigo}</code> },
+        { header: 'Nombre', sortKey: 'nombre', cell: (row) => <span className="font-medium">{row.nombre}</span> },
         {
             header: 'Observación',
             width: '120px',
+            sortKey: 'requiereObservacion',
             cell: (row) => (row.requiereObservacion ? 'Obligatoria' : 'Opcional'),
         },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',

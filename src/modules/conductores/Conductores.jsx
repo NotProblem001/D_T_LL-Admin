@@ -114,6 +114,7 @@ export default function Conductores() {
     const columns = [
         {
             header: 'Conductor',
+            sortKey: 'nombreCompleto',
             cell: (row) => (
                 <div>
                     <div className="font-medium">{row.nombreCompleto}</div>
@@ -133,6 +134,7 @@ export default function Conductores() {
         {
             header: 'Licencia',
             width: '150px',
+            sortKey: 'fechaVencimientoLicencia',
             cell: (row) => (
                 <div>
                     <div>{row.tipoLicencia || '—'}</div>
@@ -145,10 +147,11 @@ export default function Conductores() {
                 </div>
             ),
         },
-        { header: 'Contrato', width: '100px', cell: (row) => CONTRATOS[row.tipoContrato] || '—' },
+        { header: 'Contrato', width: '100px', sortKey: 'tipoContrato', cell: (row) => CONTRATOS[row.tipoContrato] || '—' },
         {
             header: 'PIN app',
             width: '100px',
+            sortKey: 'tienePin',
             cell: (row) =>
                 row.tienePin ? (
                     <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
@@ -160,7 +163,7 @@ export default function Conductores() {
                     </span>
                 ),
         },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',

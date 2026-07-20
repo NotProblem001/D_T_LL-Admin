@@ -131,6 +131,7 @@ export default function Vehiculos() {
         { header: 'Patente', accessor: 'patente', width: '110px' },
         {
             header: 'Vehículo',
+            sortValue: (row) => [row.marca, row.modelo].filter(Boolean).join(' '),
             cell: (row) => (
                 <div>
                     <div className="font-medium">
@@ -142,11 +143,12 @@ export default function Vehiculos() {
                 </div>
             ),
         },
-        { header: 'Capacidad', width: '90px', cell: (row) => `${row.capacidadPasajeros} pax` },
-        { header: 'Estado', width: '130px', cell: (row) => ESTADOS[row.estado] || row.estado },
+        { header: 'Capacidad', width: '90px', sortKey: 'capacidadPasajeros', cell: (row) => `${row.capacidadPasajeros} pax` },
+        { header: 'Estado', width: '130px', sortKey: 'estado', cell: (row) => ESTADOS[row.estado] || row.estado },
         {
             header: 'Documentos',
             width: '120px',
+            sortKey: 'documentosVencidos',
             cell: (row) =>
                 row.documentosVencidos ? (
                     <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">
@@ -158,8 +160,8 @@ export default function Vehiculos() {
                     </span>
                 ),
         },
-        { header: 'Conductor habitual', cell: (row) => row.conductorHabitualNombre || '—' },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Conductor habitual', sortKey: 'conductorHabitualNombre', cell: (row) => row.conductorHabitualNombre || '—' },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',

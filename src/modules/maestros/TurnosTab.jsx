@@ -114,14 +114,15 @@ export default function TurnosTab() {
     const columns = [
         {
             header: 'Turno',
+            sortValue: (row) => `${TIPOS[row.tipoServicio]} ${row.nombre}`,
             cell: (row) => (
                 <span className="font-medium">{TIPOS[row.tipoServicio]} turno {row.nombre}</span>
             ),
         },
-        { header: 'Inicio', width: '90px', cell: (row) => hora(row.horaInicio) },
-        { header: 'Llegada est.', width: '110px', cell: (row) => hora(row.horaLlegadaEstimada) || '—' },
-        { header: 'Días', cell: (row) => row.diasSemana || '—' },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Inicio', width: '90px', sortKey: 'horaInicio', cell: (row) => hora(row.horaInicio) },
+        { header: 'Llegada est.', width: '110px', sortKey: 'horaLlegadaEstimada', cell: (row) => hora(row.horaLlegadaEstimada) || '—' },
+        { header: 'Días', sortKey: 'diasSemana', cell: (row) => row.diasSemana || '—' },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',

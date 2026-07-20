@@ -3,8 +3,6 @@ import { useAuth } from '../context/useAuth';
 import AppLayout from '../components/layout/AppLayout';
 import Login from '../modules/auth/Login';
 import Dashboard from '../modules/dashboard/Dashboard';
-import PlaceholderPage from '../components/common/PlaceholderPage';
-import ExcelDropzone from '../components/ExcelDropzone';
 import ChecklistViaje from '../modules/checklist/ChecklistViaje';
 import NominaSemanal from '../modules/nomina/NominaSemanal';
 import Clientes from '../modules/clientes/Clientes';
@@ -18,6 +16,7 @@ import MisViajesConductor from '../modules/conductor/MisViajesConductor';
 import ViajeConductor from '../modules/conductor/ViajeConductor';
 import Maestros from '../modules/maestros/Maestros';
 import Historial from '../modules/historial/Historial';
+import Informes from '../modules/informes/Informes';
 
 // Protected Route Wrapper. El rol CONDUCTOR solo usa la vista móvil /conductor.
 function ProtectedRoute({ children, soloConductor = false }) {
@@ -54,21 +53,20 @@ export default function AppRoutes() {
                 </ProtectedRoute>
             }>
                 <Route index element={<Dashboard />} />
-                <Route path="importacion" element={<ExcelDropzone />} />
-                <Route path="revision" element={<RevisionImportacion />} />
+                {/* Importación directa por empresa (BDD / nómina / planilla / texto) */}
+                <Route path="importacion" element={<NominaSemanal />} />
                 <Route path="nomina" element={<NominaSemanal />} />
+                <Route path="revision" element={<RevisionImportacion />} />
                 <Route path="planilla" element={<PlanillaHorarios />} />
                 <Route path="viajes/:viajeId/checklist" element={<ChecklistViaje />} />
-                <Route path="bookings" element={<PlaceholderPage title="Gestión de Reservas" />} />
                 <Route path="trips" element={<Planificacion />} />
                 <Route path="incidencias" element={<Incidencias />} />
                 <Route path="historial" element={<Historial />} />
+                <Route path="informes" element={<Informes />} />
                 <Route path="drivers" element={<Conductores />} />
                 <Route path="fleet" element={<Vehiculos />} />
                 <Route path="maestros" element={<Maestros />} />
                 <Route path="clients" element={<Clientes />} />
-                <Route path="users" element={<PlaceholderPage title="Usuarios y Roles" />} />
-                <Route path="settings" element={<PlaceholderPage title="Configuración" />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

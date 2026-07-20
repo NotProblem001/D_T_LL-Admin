@@ -1,39 +1,35 @@
 import { NavLink } from 'react-router-dom';
 import {
     LayoutDashboard,
-    CalendarDays,
     Car,
-    Users,
     Briefcase,
     UserCog,
-    Settings,
     Truck,
     FileSpreadsheet,
     ClipboardList,
     Map,
     FileSearch,
     AlertTriangle,
-    History
+    History,
+    FileBarChart
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuth';
 
+// Flujo semanal de arriba hacia abajo: importar → revisar → planificar → operar → informar.
 const NAV_ITEMS = [
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
     { label: 'Importación', path: '/importacion', icon: FileSpreadsheet },
     { label: 'Revisar importación', path: '/revision', icon: FileSearch },
-    { label: 'Nómina semanal', path: '/nomina', icon: CalendarDays },
     { label: 'Planilla horarios', path: '/planilla', icon: ClipboardList },
-    { label: 'Reservas', path: '/bookings', icon: CalendarDays },
     { label: 'Planificación', path: '/trips', icon: Car },
     { label: 'Incidencias', path: '/incidencias', icon: AlertTriangle },
     { label: 'Historial', path: '/historial', icon: History },
+    { label: 'Informes', path: '/informes', icon: FileBarChart },
     { label: 'Conductores', path: '/drivers', icon: UserCog },
     { label: 'Flota', path: '/fleet', icon: Truck },
     { label: 'Maestros', path: '/maestros', icon: Map },
     { label: 'Clientes', path: '/clients', icon: Briefcase },
-    { label: 'Usuarios', path: '/users', icon: Users },
-    { label: 'Configuración', path: '/settings', icon: Settings },
 ];
 
 export default function Sidebar() {
@@ -42,7 +38,7 @@ export default function Sidebar() {
     return (
         <aside className="sidebar">
             <div className="sidebar-header">
-                <h2>AdminPanel</h2>
+                <h2>Donde Te Llevo</h2>
             </div>
 
             <nav className="sidebar-nav">

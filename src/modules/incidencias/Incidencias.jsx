@@ -62,11 +62,12 @@ export default function Incidencias() {
         {
             header: 'Fecha',
             width: '140px',
+            sortKey: 'createdAt',
             cell: (row) => new Date(row.createdAt).toLocaleString('es-CL', {
                 day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit',
             }),
         },
-        { header: 'Tipo', width: '170px', cell: (row) => <span className="font-medium">{row.tipo}</span> },
+        { header: 'Tipo', width: '170px', sortKey: 'tipo', cell: (row) => <span className="font-medium">{row.tipo}</span> },
         {
             header: 'Detalle',
             cell: (row) => (
@@ -84,10 +85,11 @@ export default function Incidencias() {
                 </div>
             ),
         },
-        { header: 'Reportó', width: '100px', cell: (row) => row.reportadoRol || '—' },
+        { header: 'Reportó', width: '100px', sortKey: 'reportadoRol', cell: (row) => row.reportadoRol || '—' },
         {
             header: 'Estado',
             width: '110px',
+            sortKey: 'estado',
             cell: (row) => {
                 const e = ESTADOS[row.estado] || ESTADOS.ABIERTA;
                 return <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${e.clase}`}>{e.texto}</span>;

@@ -111,6 +111,7 @@ export default function Historial() {
         { header: 'Fecha', width: '100px', accessor: 'fechaOperacion' },
         {
             header: 'Recorrido',
+            sortValue: (row) => `${row.jornadaTurno} ${row.tipoTrayecto} ${row.rutaNombre || ''}`,
             cell: (row) => (
                 <div>
                     <div className="font-medium">
@@ -125,11 +126,12 @@ export default function Historial() {
                 </div>
             ),
         },
-        { header: 'Conductor', cell: (row) => row.conductorNombre || '—' },
-        { header: 'Vehículo', width: '100px', cell: (row) => row.vehiculoPatente || '—' },
+        { header: 'Conductor', sortKey: 'conductorNombre', cell: (row) => row.conductorNombre || '—' },
+        { header: 'Vehículo', width: '100px', sortKey: 'vehiculoPatente', cell: (row) => row.vehiculoPatente || '—' },
         {
             header: 'Pasajeros',
             width: '130px',
+            sortKey: 'totalPasajeros',
             cell: (row) => (
                 <div className="text-xs">
                     <div>{row.totalPasajeros ?? '—'} programados</div>
@@ -141,10 +143,11 @@ export default function Historial() {
                 </div>
             ),
         },
-        { header: 'Estado', width: '110px', cell: (row) => ESTADOS[row.estado] || row.estado },
+        { header: 'Estado', width: '110px', sortKey: 'estado', cell: (row) => ESTADOS[row.estado] || row.estado },
         {
             header: 'Registros',
             width: '110px',
+            sortValue: (row) => row.cambios + row.incidencias,
             cell: (row) => (
                 <div className="text-xs text-gray-500">
                     {row.cambios > 0 && <div>{row.cambios} cambio(s)</div>}
@@ -266,9 +269,9 @@ export default function Historial() {
                         isLoading={cargando}
                         data={auditoria}
                         columns={[
-                            { header: 'Fecha', width: '130px', cell: (r) => fechaHora(r.createdAt) },
+                            { header: 'Fecha', width: '130px', sortKey: 'createdAt', cell: (r) => fechaHora(r.createdAt) },
                             { header: 'Rol', width: '100px', accessor: 'usuarioRol' },
-                            { header: 'Acción', width: '150px', cell: (r) => <span className="font-medium text-xs">{r.accion}</span> },
+                            { header: 'Acción', width: '150px', sortKey: 'accion', cell: (r) => <span className="font-medium text-xs">{r.accion}</span> },
                             { header: 'Módulo', width: '130px', accessor: 'modulo' },
                             {
                                 header: 'Descripción',

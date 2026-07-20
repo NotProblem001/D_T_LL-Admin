@@ -141,15 +141,16 @@ export default function GeografiaTab() {
     };
 
     const columnasSectores = [
-        { header: 'Sector', cell: (row) => <span className="font-medium">{row.nombre}</span> },
+        { header: 'Sector', sortKey: 'nombre', cell: (row) => <span className="font-medium">{row.nombre}</span> },
         {
             header: 'Comunas',
+            sortValue: (row) => (row.comunas || []).length,
             cell: (row) =>
                 (row.comunas || []).length
                     ? (row.comunas || []).map((c) => c.nombre).join(', ')
                     : '—',
         },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',
@@ -167,8 +168,8 @@ export default function GeografiaTab() {
     ];
 
     const columnasComunas = [
-        { header: 'Comuna', cell: (row) => <span className="font-medium">{row.nombre}</span> },
-        { header: 'Activo', width: '90px', cell: (row) => <BadgeActivo activo={row.activo} /> },
+        { header: 'Comuna', sortKey: 'nombre', cell: (row) => <span className="font-medium">{row.nombre}</span> },
+        { header: 'Activo', width: '90px', sortKey: 'activo', cell: (row) => <BadgeActivo activo={row.activo} /> },
         {
             header: '',
             width: '90px',
