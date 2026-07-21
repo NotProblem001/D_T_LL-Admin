@@ -24,7 +24,7 @@ const COLORES_ESTADO = {
     NO_ASISTIO: 'bg-red-600 text-white border-red-600',
     AVISO_PREVIO: 'bg-amber-500 text-white border-amber-500',
     NO_UTILIZA_TRANSPORTE: 'bg-gray-500 text-white border-gray-500',
-    MEDIOS_PROPIOS: 'bg-blue-500 text-white border-blue-500',
+    MEDIOS_PROPIOS: 'bg-dtll-blue text-white border-dtll-blue',
 };
 
 export default function ViajeConductor() {
@@ -142,15 +142,15 @@ export default function ViajeConductor() {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-32">
-            <header className="bg-blue-600 text-white px-4 py-4 sticky top-0 z-10">
-                <Link to="/conductor" className="inline-flex items-center gap-1 text-sm text-blue-100 mb-1">
+            <header className="bg-dtll-blue text-white px-4 py-4 sticky top-0 z-10">
+                <Link to="/conductor" className="inline-flex items-center gap-1 text-sm text-dtll-blueLight mb-1">
                     <ArrowLeft size={15} /> Mis recorridos
                 </Link>
                 <div className="font-semibold text-lg leading-tight">
                     {TIPOS[viaje.tipoTrayecto] || viaje.tipoTrayecto} {JORNADAS[viaje.jornadaTurno] || viaje.jornadaTurno}
                     {viaje.rutaNombre ? ` · ${viaje.rutaNombre}` : ''}
                 </div>
-                <div className="text-sm text-blue-100">
+                <div className="text-sm text-dtll-blueLight">
                     {viaje.fechaOperacion} · inicio {hora(viaje.horaProgramadaInicio)}
                     {viaje.vehiculoPatente ? ` · ${viaje.vehiculoPatente}` : ''}
                 </div>
@@ -182,7 +182,7 @@ export default function ViajeConductor() {
                     <button
                         onClick={() => accionViaje(iniciarViajeConductor, '¿Iniciar el recorrido ahora?')}
                         disabled={ocupado}
-                        className="w-full mb-3 flex items-center justify-center gap-2 bg-blue-600 active:bg-blue-700 disabled:opacity-60 text-white font-semibold py-4 rounded-2xl text-base"
+                        className="w-full mb-3 flex items-center justify-center gap-2 bg-dtll-blue active:bg-dtll-blueDark disabled:opacity-60 text-white font-semibold py-4 rounded-2xl text-base"
                     >
                         <Play size={20} /> Iniciar recorrido
                     </button>
@@ -225,7 +225,7 @@ export default function ViajeConductor() {
                                     </div>
                                 )}
                                 {item.telefono && (
-                                    <a href={`tel:+${item.telefono}`} className="flex items-center gap-1.5 text-blue-600">
+                                    <a href={`tel:+${item.telefono}`} className="flex items-center gap-1.5 text-dtll-blue">
                                         <Phone size={14} /> +{item.telefono}
                                     </a>
                                 )}
@@ -238,7 +238,7 @@ export default function ViajeConductor() {
                                         className={clsx(
                                             'rounded-xl border py-3 px-2 text-xs font-medium min-h-[52px]',
                                             item.estado === e.codigo
-                                                ? (COLORES_ESTADO[e.codigo] || 'bg-blue-600 text-white border-blue-600')
+                                                ? (COLORES_ESTADO[e.codigo] || 'bg-dtll-blue text-white border-dtll-blue')
                                                 : 'bg-gray-50 text-gray-600 border-gray-200 active:bg-gray-100'
                                         )}
                                     >
@@ -298,7 +298,7 @@ export default function ViajeConductor() {
                             <button
                                 onClick={() => marcar(modal.item, modal.estado.codigo,
                                     observacion || null, motivo || null)}
-                                className="flex-1 bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold"
+                                className="flex-1 bg-dtll-blue text-white rounded-xl py-3 text-sm font-semibold"
                             >
                                 Guardar
                             </button>

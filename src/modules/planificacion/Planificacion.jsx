@@ -18,7 +18,7 @@ const TIPOS = { ENTRADA: 'Entrada', SALIDA: 'Salida' };
 
 const ESTADOS = {
     BORRADOR: { texto: 'Borrador', clase: 'bg-gray-100 text-gray-600' },
-    PROGRAMADO: { texto: 'Programado', clase: 'bg-blue-50 text-blue-700' },
+    PROGRAMADO: { texto: 'Programado', clase: 'bg-dtll-blueLight text-dtll-blueDark' },
     ASIGNADO: { texto: 'Asignado', clase: 'bg-indigo-50 text-indigo-700' },
     CONFIRMADO: { texto: 'Confirmado', clase: 'bg-green-50 text-green-700' },
     EN_CURSO: { texto: 'En curso', clase: 'bg-amber-50 text-amber-700' },
@@ -174,7 +174,7 @@ export default function Planificacion() {
     return (
         <div className="max-w-7xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <CalendarRange className="text-blue-600" /> Planificación de recorridos
+                <CalendarRange className="text-dtll-blue" /> Planificación de recorridos
             </h1>
             <p className="text-gray-500 text-sm mb-6">
                 Genera la propuesta del día desde la nómina confirmada y asigna conductor y vehículo.
@@ -205,7 +205,7 @@ export default function Planificacion() {
                     <button
                         onClick={generar}
                         disabled={generando || !empresaId || !fecha}
-                        className="mb-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg"
+                        className="mb-4 flex items-center justify-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg"
                     >
                         <Wand2 size={16} /> {generando ? 'Generando…' : 'Generar propuesta'}
                     </button>
@@ -213,7 +213,7 @@ export default function Planificacion() {
             </div>
 
             {avisos.length > 0 && (
-                <div className="mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-sm">
+                <div className="mb-4 p-3 rounded-lg bg-dtll-blueLight border border-dtll-blueLight text-dtll-blueDark text-sm">
                     {avisos.map((a, i) => <div key={i}>{a}</div>)}
                 </div>
             )}
@@ -321,7 +321,7 @@ export default function Planificacion() {
                                         {cambio && (
                                             <button
                                                 onClick={() => guardarAsignacion(v)}
-                                                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-2 rounded-lg"
+                                                className="flex items-center gap-1.5 bg-dtll-blue hover:bg-dtll-blueDark text-white text-sm font-medium px-3 py-2 rounded-lg"
                                             >
                                                 <Save size={14} /> Guardar asignación
                                             </button>

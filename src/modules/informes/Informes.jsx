@@ -72,7 +72,7 @@ export default function Informes() {
     return (
         <div className="max-w-6xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <FileBarChart className="text-blue-600" /> Informes
+                <FileBarChart className="text-dtll-blue" /> Informes
             </h1>
             <p className="text-gray-500 text-sm mb-6">
                 Informe semanal para el cliente (Excel) e informes internos por conductor, vehículo y pasajero.

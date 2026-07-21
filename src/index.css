@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,17 +7,24 @@
 :root {
   --sidebar-width: 260px;
   --topbar-height: 64px;
-  --bg-body: #f9fafb;
+
+  /* Marca DTLL */
+  --bg-body: #fafaf7;      /* Blanco Cálido */
   --bg-card: #ffffff;
   --border: #e5e7eb;
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary: #31547f;      /* Azul Profundo */
+  --primary-hover: #274465;
+  --accent: #ed6f32;       /* Naranjo */
   --text-main: #111827;
-  --text-muted: #6b7280;
+  --text-muted: #6e6e6b;   /* Gris Medio */
 }
 
 @layer base {
   body {
-    @apply antialiased text-gray-900 bg-gray-50;
+    @apply antialiased font-sans text-gray-900 bg-dtll-warmWhite;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-dtll-blue;
   }
 }

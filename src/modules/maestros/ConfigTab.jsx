@@ -149,7 +149,7 @@ export default function ConfigTab() {
                 <h2 className="font-semibold text-gray-700">Estados de asistencia</h2>
                 <button
                     onClick={abrirNuevo}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg"
+                    className="flex items-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark text-white text-sm font-medium px-3 py-1.5 rounded-lg"
                 >
                     <Plus size={14} /> Nuevo estado
                 </button>
@@ -176,7 +176,7 @@ export default function ConfigTab() {
                         <button
                             onClick={() => guardarConfig(c.clave)}
                             disabled={guardandoConfig === c.clave || valoresConfig[c.clave] === c.valor}
-                            className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white"
+                            className="p-2 rounded-lg bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-40 text-white"
                             title="Guardar"
                         >
                             <Check size={16} />
@@ -239,7 +239,7 @@ export default function ConfigTab() {
                     <button
                         type="submit"
                         disabled={guardando}
-                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+                        className="w-full bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
                     >
                         {guardando ? 'Guardando…' : editando ? 'Guardar cambios' : 'Crear estado'}
                     </button>

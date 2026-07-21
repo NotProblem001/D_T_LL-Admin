@@ -3,7 +3,7 @@ import { LayoutDashboard, Users, Bus, AlertTriangle, UserCog, Truck, Percent } f
 import { obtenerEmpresas, obtenerDashboard } from '../../services/api';
 import { ErrorBox } from '../maestros/shared';
 
-function Kpi({ etiqueta, valor, icono: Icono, clase = 'text-blue-600' }) {
+function Kpi({ etiqueta, valor, icono: Icono, clase = 'text-dtll-blue' }) {
     return (
         <div className="bg-white border rounded-xl p-4">
             <div className="flex items-center justify-between mb-1">
@@ -53,7 +53,7 @@ export default function Dashboard() {
             <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
                 <div>
                     <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                        <LayoutDashboard className="text-blue-600" /> Panel operativo
+                        <LayoutDashboard className="text-dtll-blue" /> Panel operativo
                     </h1>
                     <p className="text-gray-500 text-sm">Indicadores del día y de la semana.</p>
                 </div>
@@ -105,7 +105,7 @@ export default function Dashboard() {
                         <Kpi etiqueta="Recorridos de la semana" valor={data.semana.recorridos} icono={Bus} />
                         <Kpi etiqueta="Finalizados" valor={data.semana.recorridosFinalizados} icono={Bus} clase="text-green-600" />
                         <Kpi etiqueta="Pasajeros transportados" valor={data.semana.pasajerosTransportados} icono={Users} clase="text-green-600" />
-                        <Kpi etiqueta="% asistencia" valor={`${data.semana.porcentajeAsistencia}%`} icono={Percent} clase="text-blue-600" />
+                        <Kpi etiqueta="% asistencia" valor={`${data.semana.porcentajeAsistencia}%`} icono={Percent} clase="text-dtll-blue" />
                     </div>
 
                     <h2 className="font-semibold text-gray-700 mb-3">Recursos</h2>

@@ -10,7 +10,7 @@ const COLORES = {
     NO_ASISTIO: 'bg-red-600 text-white border-red-600',
     AVISO_PREVIO: 'bg-amber-500 text-white border-amber-500',
     NO_UTILIZA_TRANSPORTE: 'bg-gray-500 text-white border-gray-500',
-    MEDIOS_PROPIOS: 'bg-blue-500 text-white border-blue-500',
+    MEDIOS_PROPIOS: 'bg-dtll-blue text-white border-dtll-blue',
 };
 
 export default function ChecklistViaje() {
@@ -143,7 +143,7 @@ export default function ChecklistViaje() {
                                         className={clsx(
                                             'flex items-center justify-center rounded-lg border py-3 px-1 text-xs font-medium transition-colors min-h-[56px] text-center',
                                             item.estado === opcion.codigo
-                                                ? (COLORES[opcion.codigo] || 'bg-blue-600 text-white border-blue-600')
+                                                ? (COLORES[opcion.codigo] || 'bg-dtll-blue text-white border-dtll-blue')
                                                 : 'bg-gray-50 text-gray-500 border-gray-200 active:bg-gray-100'
                                         )}
                                     >
@@ -168,7 +168,7 @@ export default function ChecklistViaje() {
                         type="button"
                         onClick={guardarTodo}
                         disabled={isSaving}
-                        className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-semibold px-6 py-3 rounded-lg text-sm"
+                        className="bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-60 text-white font-semibold px-6 py-3 rounded-lg text-sm"
                     >
                         {isSaving ? 'Guardando...' : 'Guardar checklist'}
                     </button>

@@ -21,7 +21,7 @@ export default function Maestros() {
     return (
         <div className="max-w-6xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <Map className="text-blue-600" /> Maestros de operación
+                <Map className="text-dtll-blue" /> Maestros de operación
             </h1>
             <p className="text-gray-500 text-sm mb-6">
                 Turnos, sectores, comunas, rutas, estados de asistencia y parámetros del sistema.
@@ -35,7 +35,7 @@ export default function Maestros() {
                         className={clsx(
                             'px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 -mb-px',
                             tab === t.id
-                                ? 'border-blue-600 text-blue-600'
+                                ? 'border-dtll-blue text-dtll-blue'
                                 : 'border-transparent text-gray-500 hover:text-gray-700'
                         )}
                     >

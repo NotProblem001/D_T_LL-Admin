@@ -171,7 +171,7 @@ export default function PlanillaHorarios() {
             <div className="flex items-start justify-between mb-6">
                 <div>
                     <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                        <ClipboardList className="text-blue-600" /> Planilla de horarios
+                        <ClipboardList className="text-dtll-blue" /> Planilla de horarios
                     </h1>
                     <p className="text-gray-500 text-sm">
                         Explora la nómina importada por empresa, semana o mes, turno, comuna y pasajero.
@@ -249,7 +249,7 @@ export default function PlanillaHorarios() {
 
             {empresaId && (
                 <div className="flex flex-wrap gap-2 mb-4 text-sm">
-                    <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">
+                    <span className="bg-dtll-blueLight text-dtll-blueDark px-3 py-1 rounded-full font-medium">
                         {stats.total} pasajeros
                     </span>
                     {Object.entries(stats.porTurno).map(([t, n]) => (

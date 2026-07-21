@@ -215,7 +215,7 @@ export default function MensajeViaje({ viaje, onClose }) {
                                     ) : (
                                         <button
                                             onClick={() => marcarEnviado(m.id)}
-                                            className="text-blue-600 hover:underline"
+                                            className="text-dtll-blue hover:underline"
                                         >
                                             Marcar enviado
                                         </button>

@@ -151,7 +151,7 @@ export default function RutasTab() {
             <div className="flex justify-end mb-4">
                 <button
                     onClick={abrirNueva}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg"
+                    className="flex items-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark text-white text-sm font-medium px-4 py-2 rounded-lg"
                 >
                     <Plus size={16} /> Nueva ruta
                 </button>
@@ -243,7 +243,7 @@ export default function RutasTab() {
                     <button
                         type="submit"
                         disabled={guardando}
-                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+                        className="w-full bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
                     >
                         {guardando ? 'Guardando…' : editando ? 'Guardar cambios' : 'Crear ruta'}
                     </button>

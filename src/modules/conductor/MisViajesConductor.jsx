@@ -31,15 +31,15 @@ export default function MisViajesConductor() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <header className="bg-blue-600 text-white px-4 py-4 flex items-center justify-between sticky top-0 z-10">
+            <header className="bg-dtll-blue text-white px-4 py-4 flex items-center justify-between sticky top-0 z-10">
                 <div className="flex items-center gap-2">
                     <Bus size={22} />
                     <div>
                         <div className="font-semibold leading-tight">Mis recorridos</div>
-                        <div className="text-xs text-blue-100">{user?.nombre}</div>
+                        <div className="text-xs text-dtll-blueLight">{user?.nombre}</div>
                     </div>
                 </div>
-                <button onClick={logout} className="p-2 rounded-lg hover:bg-blue-700" title="Salir">
+                <button onClick={logout} className="p-2 rounded-lg hover:bg-dtll-blueDark" title="Salir">
                     <LogOut size={20} />
                 </button>
             </header>

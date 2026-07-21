@@ -23,7 +23,7 @@ const MATCH_BADGES = {
     EXACTO: { texto: 'Encontrado', clase: 'bg-green-50 text-green-700' },
     TOKENS: { texto: 'Encontrado (orden distinto)', clase: 'bg-green-50 text-green-700' },
     SUGERENCIA: { texto: 'Sugerencia', clase: 'bg-amber-50 text-amber-700' },
-    NUEVO: { texto: 'Nuevo', clase: 'bg-blue-50 text-blue-700' },
+    NUEVO: { texto: 'Nuevo', clase: 'bg-dtll-blueLight text-dtll-blueDark' },
     DUPLICADO: { texto: 'Duplicado', clase: 'bg-gray-100 text-gray-500' },
     ERROR: { texto: 'Error', clase: 'bg-red-50 text-red-700' },
 };
@@ -31,7 +31,7 @@ const MATCH_BADGES = {
 const RESOLUCIONES = {
     PENDIENTE: { texto: 'Pendiente', clase: 'text-amber-600' },
     ACEPTADO: { texto: 'Vinculado', clase: 'text-green-600' },
-    NUEVO: { texto: 'Se creará', clase: 'text-blue-600' },
+    NUEVO: { texto: 'Se creará', clase: 'text-dtll-blue' },
     DESCARTADO: { texto: 'Descartado', clase: 'text-gray-400' },
 };
 
@@ -165,7 +165,7 @@ export default function RevisionImportacion() {
     return (
         <div className="max-w-6xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <FileSearch className="text-blue-600" /> Revisar importación
+                <FileSearch className="text-dtll-blue" /> Revisar importación
             </h1>
             <p className="text-gray-500 text-sm mb-6">
                 Analiza el archivo, revisa las coincidencias con la BDD de pasajeros y confirma. Nada se
@@ -217,7 +217,7 @@ export default function RevisionImportacion() {
                 <button
                     onClick={analizar}
                     disabled={analizando}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg"
+                    className="flex items-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg"
                 >
                     <Upload size={16} /> {analizando ? 'Analizando…' : 'Analizar (sin guardar)'}
                 </button>
@@ -230,7 +230,7 @@ export default function RevisionImportacion() {
                     <ul className="divide-y text-sm">
                         {historial.slice(0, 8).map((h) => (
                             <li key={h.id} className="py-2 flex items-center justify-between">
-                                <button onClick={() => abrirImportacion(h.id)} className="text-blue-600 hover:underline text-left">
+                                <button onClick={() => abrirImportacion(h.id)} className="text-dtll-blue hover:underline text-left">
                                     {TIPOS[h.tipo]} · semana {h.semana}/{h.anio} · {h.totalRegistros} registros
                                 </button>
                                 <span className="text-xs text-gray-500">{h.estado}</span>
@@ -341,7 +341,7 @@ export default function RevisionImportacion() {
                                                                 ))}
                                                                 <button
                                                                     onClick={() => resolver(r, 'NUEVO')}
-                                                                    className="text-left text-xs px-2 py-1 rounded border border-blue-200 hover:bg-blue-50 text-blue-700"
+                                                                    className="text-left text-xs px-2 py-1 rounded border border-dtll-blueLight hover:bg-dtll-blueLight text-dtll-blueDark"
                                                                 >
                                                                     <UserPlus size={11} className="inline mr-1" />Crear pasajero nuevo
                                                                 </button>

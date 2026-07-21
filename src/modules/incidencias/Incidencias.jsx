@@ -101,7 +101,7 @@ export default function Incidencias() {
             cell: (row) => row.estado !== 'CERRADA' && (
                 <button
                     onClick={(e) => { e.stopPropagation(); abrirGestion(row); }}
-                    className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+                    className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg bg-dtll-blue hover:bg-dtll-blueDark text-white"
                 >
                     <Check size={13} /> Gestionar
                 </button>
@@ -114,7 +114,7 @@ export default function Incidencias() {
             <div className="flex items-start justify-between mb-6">
                 <div>
                     <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                        <AlertTriangle className="text-blue-600" /> Incidencias
+                        <AlertTriangle className="text-dtll-blue" /> Incidencias
                     </h1>
                     <p className="text-gray-500 text-sm">
                         Reportes de conductores y operación asociados a recorridos, pasajeros y vehículos.
@@ -162,7 +162,7 @@ export default function Incidencias() {
                         <button
                             type="submit"
                             disabled={guardando}
-                            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+                            className="w-full bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
                         >
                             {guardando ? 'Guardando…' : 'Guardar'}
                         </button>

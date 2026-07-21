@@ -180,7 +180,7 @@ export default function Clientes() {
             <div className="flex items-start justify-between mb-6">
                 <div>
                     <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                        <Building2 className="text-blue-600" /> Clientes y Empresas
+                        <Building2 className="text-dtll-blue" /> Clientes y Empresas
                     </h1>
                     <p className="text-gray-500 text-sm">
                         Registra y administra las empresas clientes con las que trabajas.
@@ -188,7 +188,7 @@ export default function Clientes() {
                 </div>
                 <button
                     onClick={abrirNueva}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg"
+                    className="flex items-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark text-white text-sm font-medium px-4 py-2 rounded-lg"
                 >
                     <Plus size={16} /> Nueva empresa
                 </button>
@@ -276,7 +276,7 @@ export default function Clientes() {
                     <button
                         type="submit"
                         disabled={guardando}
-                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+                        className="w-full bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
                     >
                         {guardando ? 'Guardando…' : editando ? 'Guardar cambios' : 'Crear empresa'}
                     </button>

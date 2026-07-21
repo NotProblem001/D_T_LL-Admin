@@ -160,7 +160,7 @@ export default function Historial() {
     return (
         <div className="max-w-7xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <History className="text-blue-600" /> Historial de recorridos
+                <History className="text-dtll-blue" /> Historial de recorridos
             </h1>
             <p className="text-gray-500 text-sm mb-6">
                 Consulta inmutable de los servicios realizados: los recorridos cerrados conservan el
@@ -176,7 +176,7 @@ export default function Historial() {
                             className={clsx(
                                 'px-4 py-2 text-sm font-medium border-b-2 -mb-px',
                                 tab === id
-                                    ? 'border-blue-600 text-blue-600'
+                                    ? 'border-dtll-blue text-dtll-blue'
                                     : 'border-transparent text-gray-500 hover:text-gray-700'
                             )}
                         >
@@ -243,7 +243,7 @@ export default function Historial() {
                         <button
                             onClick={buscar}
                             disabled={!filtros.empresaId || cargando}
-                            className="mb-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg"
+                            className="mb-4 flex items-center justify-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg"
                         >
                             <Search size={15} /> Buscar
                         </button>

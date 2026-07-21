@@ -24,7 +24,7 @@ function Dropzone({ onFile, label, disabled }) {
         <div
             {...getRootProps()}
             className={`border-dashed border-2 rounded-xl p-6 text-center cursor-pointer transition-colors
-                ${isDragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300 bg-white hover:border-blue-300'}
+                ${isDragActive ? 'border-dtll-blue bg-dtll-blueLight' : 'border-gray-300 bg-white hover:border-dtll-blue'}
                 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
         >
             <input {...getInputProps()} />
@@ -92,7 +92,7 @@ export default function NominaSemanal() {
     return (
         <div className="max-w-5xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">
-                <CalendarDays className="text-blue-600" /> Importación
+                <CalendarDays className="text-dtll-blue" /> Importación
             </h1>
             <p className="text-gray-500 mb-6 text-sm">
                 Selecciona la empresa y sube el archivo: cada importación queda en la tabla de esa
@@ -165,7 +165,7 @@ export default function NominaSemanal() {
                 <button
                     onClick={procesarTexto}
                     disabled={cargando || !texto.trim()}
-                    className="mt-2 bg-blue-600 text-white text-sm px-4 py-2 rounded-lg disabled:opacity-50"
+                    className="mt-2 bg-dtll-blue text-white text-sm px-4 py-2 rounded-lg disabled:opacity-50"
                 >
                     Procesar texto
                 </button>

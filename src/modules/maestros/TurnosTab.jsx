@@ -144,7 +144,7 @@ export default function TurnosTab() {
             <div className="flex justify-end mb-4">
                 <button
                     onClick={abrirNuevo}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg"
+                    className="flex items-center gap-2 bg-dtll-blue hover:bg-dtll-blueDark text-white text-sm font-medium px-4 py-2 rounded-lg"
                 >
                     <Plus size={16} /> Nuevo turno
                 </button>
@@ -202,7 +202,7 @@ export default function TurnosTab() {
                                     onClick={() => toggleDia(dia)}
                                     className={
                                         form.dias.includes(dia)
-                                            ? 'px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white'
+                                            ? 'px-3 py-1.5 rounded-lg text-xs font-medium bg-dtll-blue text-white'
                                             : 'px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-500 hover:bg-gray-200'
                                     }
                                 >
@@ -217,7 +217,7 @@ export default function TurnosTab() {
                     <button
                         type="submit"
                         disabled={guardando}
-                        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
+                        className="w-full bg-dtll-blue hover:bg-dtll-blueDark disabled:opacity-50 text-white text-sm font-medium px-4 py-2.5 rounded-lg"
                     >
                         {guardando ? 'Guardando…' : editando ? 'Guardar cambios' : 'Crear turno'}
                     </button>
