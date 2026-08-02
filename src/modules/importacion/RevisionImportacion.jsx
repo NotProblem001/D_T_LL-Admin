@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react';
-import { FileSearch, Upload, Check, X, UserPlus } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import {
+    FileSearch, Upload, Check, X, UserPlus, Building2, FileSpreadsheet,
+    AlertTriangle, Info,
+} from 'lucide-react';
 import {
     obtenerEmpresas,
     previewImportacion,
@@ -19,6 +23,23 @@ const TIPOS = {
     TEXTO: 'Texto pegado desde correo',
 };
 
+// Qué estructura debe tener cada archivo, para que el usuario sepa de antemano
+// si su Excel calza con lo que el sistema espera leer.
+const FORMATO_ESPERADO = {
+    NOMINA: {
+        titulo: 'Formato esperado — Nómina del cliente',
+        detalle: 'Una hoja con columnas MAÑANA / TARDE / NOCHE (por ejemplo «SEM 29.xlsx»). Los nombres de los pasajeros van listados bajo cada columna de turno.',
+    },
+    PLANILLA: {
+        titulo: 'Formato esperado — Planilla interna',
+        detalle: 'Hojas llamadas Mañana / Tarde / Noche. Cada hoja con columnas: Nombre · Teléfono · Dirección · Comuna.',
+    },
+    TEXTO: {
+        titulo: 'Formato esperado — Texto del correo',
+        detalle: 'Pega el texto tal cual llega en el correo. El turno se detecta por líneas como «Turno noche» y luego los nombres.',
+    },
+};
+
 const MATCH_BADGES = {
     EXACTO: { texto: 'Encontrado', clase: 'bg-green-50 text-green-700' },
     TOKENS: { texto: 'Encontrado (orden distinto)', clase: 'bg-green-50 text-green-700' },
@@ -34,6 +55,112 @@ const RESOLUCIONES = {
     NUEVO: { texto: 'Se creará', clase: 'text-dtll-blue' },
     DESCARTADO: { texto: 'Descartado', clase: 'text-gray-400' },
 };
+
+function nombreEmpresa(e) {
+    return e?.nombre || e?.nombreFantasia || e?.razonSocial || 'Empresa sin nombre';
+}
+
+// Banner persistente que deja claro a qué empresa se le importarán los datos.
+function EmpresaBanner({ empresa }) {
+    if (!empresa) {
+        return (
+            <div className="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
+                <AlertTriangle size={16} className="shrink-0" />
+                Selecciona una empresa para saber a qué cliente se importarán los datos.
+            </div>
+        );
+    }
+    return (
+        <div className="mb-4 flex items-center gap-3 rounded-lg border border-dtll-blueLight bg-dtll-blueLight/40 px-4 py-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-dtll-blue text-white">
+                <Building2 size={18} />
+            </div>
+            <div className="leading-tight">
+                <div className="text-xs uppercase tracking-wide text-dtll-blueDark/70">Importando a la empresa</div>
+                <div className="text-base font-bold text-dtll-blueDark">{nombreEmpresa(empresa)}</div>
+            </div>
+        </div>
+    );
+}
+
+function formatoBytes(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+// Zona de carga con validación de formato .xlsx y feedback visible de qué se cargó.
+function Dropzone({ archivo, onArchivo, onRechazo, error }) {
+    const onDrop = useCallback((aceptados, rechazados) => {
+        if (rechazados.length > 0) {
+            onRechazo('El archivo debe ser una hoja de Excel con extensión .xlsx');
+            return;
+        }
+        if (aceptados[0]) onArchivo(aceptados[0]);
+    }, [onArchivo, onRechazo]);
+
+    const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
+        onDrop,
+        multiple: false,
+        accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] },
+    });
+
+    return (
+        <div className="mb-2">
+            <div
+                {...getRootProps()}
+                className={`flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed px-4 py-6 text-center cursor-pointer transition-colors ${
+                    error || isDragReject
+                        ? 'border-red-300 bg-red-50'
+                        : archivo
+                            ? 'border-green-300 bg-green-50'
+                            : isDragActive
+                                ? 'border-dtll-blue bg-dtll-blueLight/40'
+                                : 'border-gray-300 hover:border-dtll-blue hover:bg-gray-50'
+                }`}
+            >
+                <input {...getInputProps()} />
+                {archivo ? (
+                    <>
+                        <FileSpreadsheet size={26} className="text-green-600" />
+                        <div className="text-sm font-medium text-green-800">{archivo.name}</div>
+                        <div className="text-xs text-green-700">
+                            {formatoBytes(archivo.size)} · Listo para analizar
+                        </div>
+                        <div className="text-xs text-gray-500">Haz clic o arrastra otro archivo para reemplazarlo</div>
+                    </>
+                ) : (
+                    <>
+                        <Upload size={26} className={isDragReject ? 'text-red-500' : 'text-gray-400'} />
+                        <div className="text-sm font-medium text-gray-700">
+                            {isDragActive ? 'Suelta el archivo aquí' : 'Arrastra el Excel o haz clic para elegirlo'}
+                        </div>
+                        <div className="text-xs text-gray-500">Solo archivos .xlsx</div>
+                    </>
+                )}
+            </div>
+            {error && (
+                <div className="mt-1.5 flex items-center gap-1.5 text-xs text-red-600">
+                    <X size={13} /> {error}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function FormatoAyuda({ tipo }) {
+    const f = FORMATO_ESPERADO[tipo];
+    if (!f) return null;
+    return (
+        <div className="mb-3 flex gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600">
+            <Info size={14} className="mt-0.5 shrink-0 text-dtll-blue" />
+            <div>
+                <span className="font-medium text-gray-700">{f.titulo}. </span>
+                {f.detalle}
+            </div>
+        </div>
+    );
+}
 
 function Chip({ etiqueta, valor, destaca }) {
     return (
@@ -51,6 +178,7 @@ export default function RevisionImportacion() {
     const [anio, setAnio] = useState('');
     const [semana, setSemana] = useState('');
     const [archivo, setArchivo] = useState(null);
+    const [archivoError, setArchivoError] = useState('');
     const [texto, setTexto] = useState('');
     const [analizando, setAnalizando] = useState(false);
 
@@ -131,7 +259,8 @@ export default function RevisionImportacion() {
     };
 
     const confirmar = async () => {
-        if (!window.confirm('¿Confirmar la importación? Se actualizarán pasajeros y la nómina de la semana.')) return;
+        const nombre = nombreEmpresa(empresaSel);
+        if (!window.confirm(`¿Confirmar la importación para «${nombre}»? Se actualizarán pasajeros y la nómina de la semana.`)) return;
         setError('');
         setConfirmando(true);
         try {
@@ -161,6 +290,11 @@ export default function RevisionImportacion() {
     const registros = detalle?.registros || [];
     const pendientes = registros.filter((r) => r.resolucion === 'PENDIENTE').length;
     const esBorrador = resumen?.estado === 'BORRADOR';
+    const empresaSel = empresas.find((e) => String(e.id) === String(empresaId));
+    // Feedback de lectura del formato tras analizar.
+    const sinRegistros = resumen && resumen.totalRegistros === 0;
+    const soloErrores = resumen && resumen.totalRegistros > 0 && resumen.totalErrores === resumen.totalRegistros;
+    const formatoDudoso = sinRegistros || soloErrores;
 
     return (
         <div className="max-w-6xl mx-auto p-6">
@@ -174,6 +308,8 @@ export default function RevisionImportacion() {
 
             <ErrorBox mensaje={error} />
 
+            <EmpresaBanner empresa={empresaSel} />
+
             {/* Paso 1: origen */}
             <div className="bg-white border rounded-lg p-4 mb-6">
                 <div className="grid md:grid-cols-4 gap-3">
@@ -181,7 +317,7 @@ export default function RevisionImportacion() {
                         <select value={empresaId} onChange={(e) => setEmpresaId(e.target.value)} className={inputClass}>
                             <option value="">— Selecciona —</option>
                             {empresas.map((e) => (
-                                <option key={e.id} value={e.id}>{e.nombre || e.nombreFantasia || e.razonSocial}</option>
+                                <option key={e.id} value={e.id}>{nombreEmpresa(e)}</option>
                             ))}
                         </select>
                     </Campo>
@@ -202,16 +338,20 @@ export default function RevisionImportacion() {
                     </Campo>
                 </div>
 
+                <FormatoAyuda tipo={tipo} />
+
                 {tipo === 'TEXTO' ? (
                     <Campo label="Texto del correo">
                         <textarea value={texto} onChange={(e) => setTexto(e.target.value)} rows={6}
                                   placeholder={'Turno noche\nAlberto Bracho\n…'} className={inputClass} />
                     </Campo>
                 ) : (
-                    <Campo label="Archivo Excel (.xlsx)">
-                        <input type="file" accept=".xlsx" onChange={(e) => setArchivo(e.target.files?.[0] || null)}
-                               className="mt-1 block text-sm" />
-                    </Campo>
+                    <Dropzone
+                        archivo={archivo}
+                        error={archivoError}
+                        onArchivo={(f) => { setArchivo(f); setArchivoError(''); }}
+                        onRechazo={(msg) => { setArchivo(null); setArchivoError(msg); }}
+                    />
                 )}
 
                 <button
@@ -243,6 +383,29 @@ export default function RevisionImportacion() {
             {/* Paso 2: revisión */}
             {detalle && (
                 <>
+                    {/* Feedback de si el formato de la hoja se leyó bien */}
+                    {formatoDudoso ? (
+                        <div className="mb-4 flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                            <AlertTriangle size={18} className="mt-0.5 shrink-0" />
+                            <div>
+                                <div className="font-semibold">
+                                    {sinRegistros
+                                        ? 'No se leyó ninguna fila del archivo.'
+                                        : 'Todas las filas dieron error.'}
+                                </div>
+                                <div className="text-xs">
+                                    Revisa que el archivo tenga el formato esperado: {FORMATO_ESPERADO[resumen.tipo]?.detalle}
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="mb-4 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-2.5 text-sm text-green-800">
+                            <Check size={16} className="shrink-0" />
+                            Archivo leído correctamente: {resumen.totalRegistros} fila{resumen.totalRegistros === 1 ? '' : 's'} detectada{resumen.totalRegistros === 1 ? '' : 's'}
+                            {resumen.totalErrores > 0 && ` · ${resumen.totalErrores} con error`}.
+                        </div>
+                    )}
+
                     <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-4">
                         <Chip etiqueta="Registros" valor={resumen.totalRegistros} />
                         <Chip etiqueta="Encontrados" valor={resumen.totalEncontrados} />
@@ -254,6 +417,9 @@ export default function RevisionImportacion() {
 
                     <div className="flex items-center justify-between mb-3">
                         <div className="text-sm text-gray-600">
+                            <span className="inline-flex items-center gap-1 font-medium text-dtll-blueDark">
+                                <Building2 size={14} /> {nombreEmpresa(empresaSel)}
+                            </span>{' · '}
                             {resumen.nombreArchivo} · semana {resumen.semana}/{resumen.anio} ·{' '}
                             <span className="font-medium">{resumen.estado}</span>
                         </div>
